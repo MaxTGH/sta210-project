@@ -1,6 +1,6 @@
 ---
 title: "Project Proposal"
-author: "Add name(s)"
+author: "Max Niu & Hyeonsu An"
 format: pdf
 execute: 
   warning: false
@@ -14,7 +14,7 @@ library(tidyverse)
 library(tidymodels)
 # add other packages as needed
 
-# add code to load data
+events <- read_csv("data/global_climate_events_economic_impact_2020_2025.csv†")
 ```
 
 ## Introduction
@@ -25,7 +25,7 @@ library(tidymodels)
 
 ...
 
-## Data processing 
+## Data processing
 
 ...
 
