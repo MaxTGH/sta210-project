@@ -30,6 +30,8 @@ raw_events <- read_excel("data/emdat_disasters_2000_2025.xlsx")
 
 ...
 
+#2000 to 2025
+
 ## Data description
 
 ...
@@ -48,7 +50,7 @@ events <- events |>
 
 
 events <- events |>
-  drop_na()
+  drop_na() #selecting was done before because otherwise too many rows would be dropped
 
 events <- events |>
   mutate(
@@ -99,7 +101,7 @@ Predictors of interests (Data from EM-DAT):
 5.  no_injured - Number of people with physical injuries, trauma, or illness requiring immediate medical assistance due to the disaster
 6.  no_affected - Number of people requiring immediate assistance due to the disaster
 
-We will explore multiple linear regression to predict the value of all economic losses of a disaster (in thousands of USD) with the above predictors.
+We will explore multiple linear regression to predict the value (quantative variable) of all economic losses of a disaster (in thousands of USD) with the above predictors.
 
 ## Data dictionary
 
