@@ -14,7 +14,7 @@ library(tidyverse)
 library(tidymodels)
 # add other packages as needed
 
-events <- read_csv("data/global_climate_events_economic_impact_2020_2025.csv†")
+events <- read_csv("data/global_climate_events_economic_impact_2020_2025.csv")
 ```
 
 ## Introduction
