@@ -103,6 +103,6 @@ We will explore multiple linear regression to predict the value of all economic 
 
 ## Data dictionary
 
-The data dictionary can be found [here](ADD%20LINK!!!) \[Update the link and remove this note!\]
+The data dictionary can be found [here](https://labs-az-08.oit.duke.edu:30107/p/26598861/web/viewer.html) \[Update the link and remove this note!\]
 
 ## AI Disclosure
