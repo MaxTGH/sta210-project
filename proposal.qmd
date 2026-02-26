@@ -64,10 +64,11 @@ Based on economic reasoning and relevant research, we expect that...
 
 This data was obtained from the Emergency Events Database, otherwise known as [EM-DAT](https://doc.emdat.be/docs/data-structure-and-content/emdat-public-table/#column-description), which is maintained by tghe Centre for Research on the Epidemiology of Disasters (CRED). The goal of the database is to compile standardized information on natural disasters that occur around the world. 
 According to the information on metadata, an event is included in EM-DAT if one or more of the following criteria is met:
-* 10+ people killed
-* 100+ people affected
-* Declaration of a state of emergency
-* Solicitation of international assistance
+
+- 10+ people killed
+- 100+ people affected
+- Declaration of a state of emergency
+- Solicitation of international assistance
 
 Out of the many data points collected, we decided to heed to the following predictors:
 
