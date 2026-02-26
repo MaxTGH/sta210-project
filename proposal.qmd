@@ -12,14 +12,29 @@ editor: visual
 #| label: load-pkg-data
 library(tidyverse)
 library(tidymodels)
+library(readxl)
+library(janitor)
+library(lubridate)
+
 # add other packages as needed
 
+<<<<<<< HEAD
 events <- read_csv("data/global_climate_events_economic_impact_2020_2025.csv")
+=======
+kaggle_events <- read_csv("data/global_climate_events_economic_impact_2020_2025.csv") 
+#probably not gonna use
+
+raw_events <- read_excel("data/emdat_disasters_2000_2025.xlsx") 
+
+#2000 to 2025
+>>>>>>> a288a59f1cd172d7a38e85b3dae860968bb3e18c
 ```
 
 ## Introduction
 
 ...
+
+#2000 to 2025
 
 ## Data description
 
@@ -27,14 +42,73 @@ events <- read_csv("data/global_climate_events_economic_impact_2020_2025.csv")
 
 ## Data processing
 
-...
+```{r}
+
+events <- raw_events |>
+  clean_names()
+
+
+events <- events |>
+  select(disaster_type, country, start_year, start_month, start_day, end_year, end_month, 
+         end_day, total_deaths, no_injured, no_affected, total_affected, total_damage_000_us)
+
+
+events <- events |>
+  drop_na() #selecting was done before because otherwise too many rows would be dropped
+
+events <- events |>
+  mutate(
+    start_date = make_date(start_year, start_month, start_day),
+    end_date = make_date(end_year, end_month, end_day),
+    duration_days = as.numeric(end_date - start_date)
+  )
+
+```
 
 ## Analysis approach
 
-...
+```{r}
+
+events |> #with outliers
+  ggplot(aes(x = total_damage_000_us)) +
+  geom_histogram() + 
+  labs(
+    x = "Value of all economic losses (thousands of US dollars)",
+    title = "Distribution of Economic Damage of Disasters from 2000 - 2025",
+    subtitle = "With outliers"
+  )
+
+summary(events$total_damage_000_us)
+
+events_removedOutliers <- events |>
+  filter(as.integer(total_damage_000_us) < (559750 + 1.5* (559750 - 20000)) & 
+         as.integer(total_damage_000_us) > (20000 - 1.5 * (559750 - 20000)))
+
+events_removedOutliers |> #without outliers
+  ggplot(aes(x = total_damage_000_us)) +
+  geom_histogram() + 
+  labs(
+    x = "Value of all economic losses (thousands of US dollars)",
+    title = "Distribution of Economic Damage of Disasters from 2000 - 2025",
+    subtitle = "Without outliers"
+  )
+```
+
+The distribution is right-skewed and unimodal. The center is best represented by the median, which is \$109,576,000, and the spread is best represented with the IQR, which is \$539,750,000 (559,750,000 - 20,000,000). There are 123 (828-705) outliers present in the upper end of our distribution.
+
+Predictors of interests (Data from EM-DAT):
+
+1.  disaster_type - the type of disaster
+2.  country - country where the disaster occurred and had an impact. If multiple countries are affected, each will have an entry.
+3.  duration - duration in days of the disaster.
+4.  total_deaths - Total fatalities (deceased and missing combined)
+5.  no_injured - Number of people with physical injuries, trauma, or illness requiring immediate medical assistance due to the disaster
+6.  no_affected - Number of people requiring immediate assistance due to the disaster
+
+We will explore multiple linear regression to predict the value (quantative variable) of all economic losses of a disaster (in thousands of USD) with the above predictors.
 
 ## Data dictionary
 
-The data dictionary can be found [here](ADD%20LINK!!!) \[Update the link and remove this note!\]
+The data dictionary can be found [here](https://labs-az-08.oit.duke.edu:30107/p/26598861/web/viewer.html) \[Update the link and remove this note!\]
 
 ## AI Disclosure
