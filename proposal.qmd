@@ -28,52 +28,48 @@ raw_events <- read_excel("data/emdat_disasters_2000_2025.xlsx")
 
 ## Introduction
 
-#### Background: 
+#### Background:
 
-As global temperatures rise, climate-related disasters have increased in both frequency and severity over the past several decades ([World Wild Life](https://www.worldwildlife.org/resources/explainers/is-climate-change-increasing-the-risk-of-disasters/)). Extreme weather events such as floods, droughts, hurricanes, etc. impose a huge human and real economic costs across the world. It is imperative that we understand the determinants of disaster severity for better policy planning and mitigative strategies. 
+As global temperatures rise, climate-related disasters have increased in both frequency and severity over the past several decades ([World Wild Life](https://www.worldwildlife.org/resources/explainers/is-climate-change-increasing-the-risk-of-disasters/)). Extreme weather events such as floods, droughts, hurricanes, etc. impose a huge human and real economic costs across the world. It is imperative that we understand the determinants of disaster severity (in terms of economic damages) for better policy planning and mitigative strategies.
 
-The Emergency Events Database (EM-DAT), maintained by the Centre for Research on the Epidemiology of Disasters (CRED), keeps an internationally standardized data on natural diasters worldwide. The information includes disaster type, location, affected population, deaths, injuries, and economic damanges. 
+The Emergency Events Database (EM-DAT), maintained by the Centre for Research on the Epidemiology of Disasters (CRED), keeps an internationally standardized data on natural diasters worldwide. The information includes disaster type, location, affected population, deaths, injuries, and economic damages.
 
-#### Research Question: 
+#### Research Question:
 
-How do different disaster characteristics (such as geographic location, time of year, type, and total casualties incurred) affect the total economic damage caused by natural disasters in USD?
+How do different disaster characteristics (such as geographic location, time of year, type, and total casualties incurred) predict the total economic damage caused by natural disasters in USD?
 
-* Specifically, we examine whether disaster type, location, timing, duration, and measures of human impact (deaths, injuries, and affected population) are associated with higher reported economic losses.
+-   Specifically, we examine whether disaster type, location, timing, duration, and measures of human impact (deaths, injuries, and affected population) are associated with higher reported economic losses.
 
-#### Motivation: 
+#### Motivation:
 
-We were first drawn to this research question because were intrigued by this data; we were amazed by the granularity and the surprising breadth of information in this data. However, we realized that doing research on this matter could have real, practial uses. 
+We were first drawn to this research question because were intrigued by this data; we were amazed by the granularity and the surprising breadth of information in this data. However, we realized that doing research on this matter could have real, practial uses.
 
-First, identifying predictors of large economic damage is critical for both public and private institutions. Governments and international organizations allocate substantial resources towards mitigation and recovery efforts, yet the determinants of high-cost disasters vary across event types and regions. Same applies for insurance companies and hedge fund traders that try modeling in key determinants relevant to a disaster for their comparative advavantage against peers in the market.
+First, identifying predictors of large economic damage is critical for both public and private institutions. Governments and international organizations allocate substantial resources towards mitigation and recovery efforts, yet the determinants of high-cost disasters vary across event types and regions. Same applies for insurance companies and hedge fund traders that try modeling key determinants relevant to a disaster for their comparative advavantage against peers in the market.
 
-By analyzing global disaster data, this project aims to quantify which observable characteristics are most strongly associated with absolute economic loss dollars. We hope that these results may provide insight into which types of disasters and impact measures are most economically destructive. 
+By analyzing global disaster data, this project aims to quantify which observable characteristics are most strongly associated with economic loss. We hope that these results may provide insight into which types of disasters and impact measures are most economically destructive.
 
-#### Hypothesis Reasoning: 
+#### Hypothesis Reasoning:
 
 Based on economic reasoning and relevant research, we expect that...
 
-1. Disasters with higher number of affected individuals (absolute number, number of deaths and injuries) will have a positive relationship with economic damage.
-2. Certain disaster types will incur systematically higher economic damage than that of others. 
-3. The level of damage dollars will defer based on countries because of their respective infrastructure that exists to mitigate damage. 
+1.  Disasters with higher number of affected individuals (absolute number, number of deaths and injuries) will have a positive relationship with economic damage.
+2.  Certain disaster types will incur systematically higher economic damage than that of others.
+3.  The level of damage dollars will defer based on countries because of their respective infrastructure that exists to mitigate damage.
 
 ...
 
 ## Data description
 
-#### Data Source: 
+#### Data Source:
 
-This data was obtained from the Emergency Events Database, otherwise known as [EM-DAT](https://doc.emdat.be/docs/data-structure-and-content/emdat-public-table/#column-description), which is maintained by tghe Centre for Research on the Epidemiology of Disasters (CRED). The goal of the database is to compile standardized information on natural disasters that occur around the world. 
-According to the information on metadata, an event is included in EM-DAT if one or more of the following criteria is met:
+This data was obtained from the Emergency Events Database, otherwise known as [EM-DAT](https://doc.emdat.be/docs/data-structure-and-content/emdat-public-table/#column-description), which is maintained by the Centre for Research on the Epidemiology of Disasters (CRED). The goal of the database is to compile standardized information on natural disasters that occur around the world. According to the information on metadata, an event is included in EM-DAT if one or more of the following criteria is met:
 
-- 10+ people killed
-- 100+ people affected
-- Declaration of a state of emergency
-- Solicitation of international assistance
+-   10+ people killed
+-   100+ people affected
+-   Declaration of a state of emergency
+-   Solicitation of international assistance
 
-Out of the many data points collected, we decided to heed to the following predictors:
-
-* Categorical Predictors: Disaster Type (earthquake, hurricane, etc.), Country
-* Quantitative Predictors: start year, start month, start day, end year, end month, end day, total deaths, total injuries, binary indicator of injuries, binary indicator of deaths, total people affected 
+The observations describe different disasters that occurred around the world. Of each disaster, data on the number of people injured, affected, homeless, or killed, the total economic damages, type of disaster, exact location, start date and end date of the disaster were collected.
 
 ...
 
@@ -135,17 +131,19 @@ The distribution is right-skewed and unimodal. The center is best represented by
 
 Predictors of interests (Data from EM-DAT):
 
-1.  disaster_type - the type of disaster
-2.  country - country where the disaster occurred and had an impact. If multiple countries are affected, each will have an entry.
-3.  duration - duration in days of the disaster.
-4.  total_deaths - Total fatalities (deceased and missing combined)
-5.  no_injured - Number of people with physical injuries, trauma, or illness requiring immediate medical assistance due to the disaster
-6.  no_affected - Number of people requiring immediate assistance due to the disaster
+1.  disaster_type - the type of disaster (categorical)
+2.  country (might change to continent) - country where the disaster occurred and had an impact. If multiple countries are affected, each will have an entry (categorical)
+3.  duration - duration in days of the disaster (quantitative)
+4.  total_deaths - Total fatalities (deceased and missing combined) (quantitative)
+5.  no_injured - Number of people with physical injuries, trauma, or illness requiring immediate medical assistance due to the disaster (quantitative)
+6.  no_affected - Number of people requiring immediate assistance due to the disaster (quantitative)
+
+There is some overlap between the last 3 quantitative predictors, but we will explore it later through VIF tests.
 
 We will explore multiple linear regression to predict the value (quantative variable) of all economic losses of a disaster (in thousands of USD) with the above predictors.
 
 ## Data dictionary
 
-The data dictionary can be found [here](https://labs-az-08.oit.duke.edu:30107/p/26598861/web/viewer.html) \[Update the link and remove this note!\]
+The data dictionary can be found [here](https://labs-az-08.oit.duke.edu:30107/p/26598861/web/viewer.html).
 
 ## AI Disclosure
