@@ -144,6 +144,6 @@ We will explore multiple linear regression to predict the value (quantative vari
 
 ## Data dictionary
 
-The data dictionary can be found [here](https://labs-az-08.oit.duke.edu:30107/p/26598861/web/viewer.html).
+The data dictionary can be found [here](https://github.com/sta210-sp26/project-MaxTGH-hyeonsuan06/blob/main/data/README.md).
 
 ## AI Disclosure

@@ -9,7 +9,7 @@ The data dictionary for your data file(s) using the following format.
 ## Name of data file - emdat_disasters_2000_2025.xlsx
 
 | Variable | Description |
-|----|----|
+|------------------------------------|------------------------------------|
 | DisNo. | A unique 8-digit identifier including the year (4 digits) and a sequential number (4 digits) for each disaster event (i.e., 2004-0659). In the EM-DAT Public Table, the ISO country code is appended. See column **ISO** below. |
 | Historic | Binary field specifying whether or not the disaster happened before 2000, using the **Start Year**. Data before 2000 should be considered of lesser quality (see [Time Bias](https://doc.emdat.be/docs/known-issues-and-limitations/specific-biases/#time-bias)). |
 | Classification Key | A unique 15-character string identifying disasters in terms of the **Group**, **Subgroup**, **Type** and **Subtype** classification hierarchy. See [Disaster Classification System](https://doc.emdat.be/docs/data-structure-and-content/disaster-classification-system/). |
@@ -57,3 +57,5 @@ The data dictionary for your data file(s) using the following format.
 | GADM Admin Units | Collection of impacted Administrative Units from the [GADM Database of Global Administrative Areas](https://www.gadm.org/) (version 4.1). Individual objects correspond to Level-1 or Level-2 Administrative Units, with a unique identifier `gid_1` or `gid_2` mapping to the associated geometries in the GADM referential. Most GADM geocoded units before 2026 have been matched to GAUL units using geoprocessing (**Admin Unit** column). Migrated objects include additional fields reporting the date (`migration_date`) and specific method (`migration_method`) involved in the process. For more information see the [Spatial Information and Geocoding](https://doc.emdat.be/docs/data-structure-and-content/spatial-information/). |
 | Entry Date | The day on which the event record was created in EM-DAT. |
 | Last Update | The last modification of the event or one of its associated records in EM-DAT. This may not result in a modification of the information in the EM-DAT Public Table as modifications to private fields are recorded as well. |
+
+Code book from <https://doc.emdat.be/docs/data-structure-and-content/emdat-public-table/#column-description>.
