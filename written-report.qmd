@@ -13,9 +13,75 @@ editor: visual
 ```{r}
 #| label: load-pkg-data
 
+raw_events <- read_excel("data/emdat_disasters_2000_2025.xlsx") 
+
 ```
 
-Your written report goes here!
+## Data processing
+
+```{r}
+events <- raw_events |>
+  clean_names()
+
+events <- events |>
+  select(disaster_type, country, start_year, start_month, start_day, end_year, end_month, 
+         end_day, total_deaths, no_injured, no_affected, total_affected, total_damage_000_us)
+
+
+events <- events |>
+  drop_na() #selecting was done before because otherwise too many rows would be dropped
+
+events <- events |>
+  mutate(
+    start_date = make_date(start_year, start_month, start_day),
+    end_date = make_date(end_year, end_month, end_day),
+    duration_days = as.numeric(end_date - start_date)
+  )
+
+```
+
+## Exploratory Data Analysis
+
+```{r}
+events |> #with outliers
+  ggplot(aes(x = total_damage_000_us)) +
+  geom_histogram() + 
+  labs(
+    x = "Value of all economic losses (thousands of US dollars)",
+    title = "Distribution of Economic Damage of Disasters from 2000 - 2025",
+    subtitle = "With outliers"
+  )
+
+summary(events$total_damage_000_us)
+
+events_removedOutliers <- events |>
+  filter(as.integer(total_damage_000_us) < (559750 + 1.5* (559750 - 20000)) & 
+         as.integer(total_damage_000_us) > (20000 - 1.5 * (559750 - 20000)))
+
+events_removedOutliers |> #without outliers
+  ggplot(aes(x = total_damage_000_us)) +
+  geom_histogram() + 
+  labs(
+    x = "Value of all economic losses (thousands of US dollars)",
+    title = "Distribution of Economic Damage of Disasters from 2000 - 2025",
+    subtitle = "Without outliers"
+  )
+
+```
+
+Predictors of interests (Data from EM-DAT):
+
+1.  disaster_type - the type of disaster (categorical)
+
+2.  country (might change to continent) - country where the disaster occurred and had an impact. If multiple countries are affected, each will have an entry (categorical)
+
+3.  duration - duration in days of the disaster (quantitative)
+
+4.  total_deaths - Total fatalities (deceased and missing combined) (quantitative)
+
+5.  no_injured - Number of people with physical injuries, trauma, or illness requiring immediate medical assistance due to the disaster (quantitative)
+
+6.  no_affected - Number of people requiring immediate assistance due to the disaster (quantitative)
 
 ::: callout-important
 Before you submit, make sure your code chunks are turned off with `echo: false` and there are no warnings or messages with `warning: false` and `message: false` in the YAML.
