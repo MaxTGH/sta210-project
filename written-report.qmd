@@ -40,6 +40,36 @@ events <- events |>
 
 ```
 
+## Introduction
+
+#### Background:
+
+As global temperatures rise, climate-related disasters have increased in both frequency and severity over the past several decades ([World Wild Life](https://www.worldwildlife.org/resources/explainers/is-climate-change-increasing-the-risk-of-disasters/)). Extreme weather events such as floods, droughts, hurricanes, etc. impose a huge human and real economic costs across the world. It is imperative that we understand the determinants of disaster severity (in terms of economic damages) for better policy planning and mitigative strategies.
+
+The Emergency Events Database (EM-DAT), maintained by the Centre for Research on the Epidemiology of Disasters (CRED), keeps an internationally standardized data on natural diasters worldwide. The information includes disaster type, location, affected population, deaths, injuries, and economic damages.
+
+#### Research Question:
+
+How do different disaster characteristics (such as geographic location, time of year, type, and total casualties incurred) predict the total economic damage caused by natural disasters in USD?
+
+-   Specifically, we examine whether disaster type, location, timing, duration, and measures of human impact (deaths, injuries, and affected population) are associated with higher reported economic losses.
+
+#### Motivation:
+
+We were first drawn to this research question because were intrigued by this data; we were amazed by the granularity and the surprising breadth of information in this data. However, we realized that doing research on this matter could have real, practial uses.
+
+First, identifying predictors of large economic damage is critical for both public and private institutions. Governments and international organizations allocate substantial resources towards mitigation and recovery efforts, yet the determinants of high-cost disasters vary across event types and regions. Same applies for insurance companies and hedge fund traders that try modeling key determinants relevant to a disaster for their comparative advavantage against peers in the market.
+
+By analyzing global disaster data, this project aims to quantify which observable characteristics are most strongly associated with economic loss. We hope that these results may provide insight into which types of disasters and impact measures are most economically destructive.
+
+#### Hypothesis Reasoning:
+
+Based on economic reasoning and relevant research, we expect that...
+
+1.  Disasters with higher number of affected individuals (absolute number, number of deaths and injuries) will have a positive relationship with economic damage.
+2.  Certain disaster types will incur systematically higher economic damage than that of others.
+3.  The level of damage dollars will defer based on countries because of their respective infrastructure that exists to mitigate damage.
+
 ## Exploratory Data Analysis
 
 ```{r}
