@@ -1,6 +1,6 @@
 ---
 title: "Add project title"
-author: "Add name(s)"
+author: "Max Niu"
 date: "Update date"
 format: pdf
 execute: 
@@ -12,6 +12,11 @@ editor: visual
 
 ```{r}
 #| label: load-pkg-data
+library(tidyverse)
+library(tidymodels)
+library(readxl)
+library(janitor)
+library(lubridate)
 
 raw_events <- read_excel("data/emdat_disasters_2000_2025.xlsx") 
 
@@ -20,6 +25,10 @@ raw_events <- read_excel("data/emdat_disasters_2000_2025.xlsx")
 ## Data processing
 
 ```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| 
 events <- raw_events |>
   clean_names()
 
@@ -70,6 +79,19 @@ Based on economic reasoning and relevant research, we expect that...
 2.  Certain disaster types will incur systematically higher economic damage than that of others.
 3.  The level of damage dollars will defer based on countries because of their respective infrastructure that exists to mitigate damage.
 
+#### Data Description:
+
+This data was obtained from the Emergency Events Database, otherwise known as [EM-DAT](https://doc.emdat.be/docs/data-structure-and-content/emdat-public-table/#column-description), which is maintained by the Centre for Research on the Epidemiology of Disasters (CRED). The goal of the database is to compile standardized information on natural disasters that occur around the world. According to the information on metadata, an event is included in EM-DAT if one or more of the following criteria is met:
+
+-   10+ people killed
+-   100+ people affected
+-   Declaration of a state of emergency
+-   Solicitation of international assistance
+
+The observations describe different disasters that occurred around the world. Of each disaster, data on the number of people injured, affected, homeless, or killed, the total economic damages, type of disaster, exact location, start date and end date of the disaster were collected.
+
+The data dictionary can be found [here](https://github.com/sta210-sp26/project-MaxTGH-hyeonsuan06/blob/main/data/README.md).
+
 ## Exploratory Data Analysis
 
 ```{r}
@@ -99,9 +121,16 @@ events_removedOutliers |> #without outliers
 
 ```
 
-Predictors of interests (Data from EM-DAT):
+The distribution is right-skewed and unimodal. The center is best represented by the median, which is \$109,576,000, and the spread is best represented with the IQR, which is \$539,750,000 (559,750,000 - 20,000,000). There are 123 (828-705) outliers present in the upper end of our distribution.
+
+Predictors of interests:
 
 1.  disaster_type - the type of disaster (categorical)
+
+    ```{r}
+
+
+    ```
 
 2.  country (might change to continent) - country where the disaster occurred and had an impact. If multiple countries are affected, each will have an entry (categorical)
 
