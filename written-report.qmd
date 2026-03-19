@@ -125,7 +125,8 @@ events |> #with outliers
   )
 
 events <- events|>
-  mutate(log_total_damage_000_us = log(total_damage_000_us))
+  mutate(log_total_damage_000_us = log(total_damage_000_us),
+         log_duration_days = log(duration_days))
 
 
 summary(events$log_total_damage_000_us)
@@ -135,7 +136,7 @@ sd(events$log_total_damage_000_us)
 
 The distribution of the unchanged response variable is right-skewed and unimodal. The center is best represented by the median, which is \$109,576,000, and the spread is best represented with the IQR, which is \$539,750,000 (559,750,000 - 20,000,000). There are 123 (828-705) outliers present in the upper end of our distribution.
 
-The distribution of the logged response variable is unimodal and symmetric. The center is best represented by the mean, which is \$98,027,173.52 (e\^11.493 \* 1000), and the spread is best represented with the standard deviation, which is \$13544.98 (e\^2.606016 \* 1000). There are outliers present in our distribution.
+The distribution of the logged response variable is unimodal and symmetric. The center is best represented by the mean, which is \$98,027,173.52 (e\^11.493 \* 1000), and the spread is best represented with the standard deviation, which is \$13544.98 (e\^2.606016 \* 1000). There are outliers present in our distribution. **We will be working with the logged response variable**, log of total economic damage in thousands of USD, because without the log, the outliers skew the data heavily.
 
 Predictors of interests:
 
@@ -160,16 +161,26 @@ Predictors of interests:
     Storms, floods, and earthquakes are the most common disaster types, composing most of the data. Storms are the most common. Extreme temperature, wet mass movements, volcanic activity, and wildfires are the least common disaster types, with extreme temperature being the least common.
 
     ```{r}
+    #| fig-width: 8
 
     events |>
       ggplot(aes(x = disaster_type, y = log(total_damage_000_us))) +
       geom_boxplot() + 
       labs(
         x = "Disaster Type",
-        y = "Log of Total Economic Damage (Thousands of USD)",
+        y = "Log Total Economic Damage (Thousands of USD)",
         title = "Distribution of Log of Total Economic Damage for each Disaster Type"
       )
+
+    events |>
+      group_by(disaster_type) |>
+      summarize(
+        median = median(log_total_damage_000_us),
+        IQR = IQR(log_total_damage_000_us)
+      )
     ```
+
+    Wildfires have the highest median log of total economic damage (in thousands of dollars), which is 12.558857, and thus, normal total economic damage, which would be 284604.84 thousands of dollars (e\^12.558857). The median of earthquakes is slightly lower, and then the median of volcanic activities, floods, and storms, which all have similar values, slightly below the median of earthquakes. Wet mass movements have the lowest median (log of) total economic damage. Storms, floods, and earthquakes have the highest variability in the (log of) total economic damage.
 
 2.  duration - duration in days of the disaster (quantitative)
 
@@ -192,18 +203,41 @@ Predictors of interests:
         y = "Count",
         title = "Distribution of Duration of Disasters"
       )
+
+
+    summary(events$log_duration_days)
     ```
+
+    Because of the extreme outliers and extreme skew in the histogram of the duration (in days) of each disaster, we decided to explore the log of the duration of the disaster. The histogram of the log of the duration has right skew and is bimodal. This makes sense because a lot of the disasters only last 1 day long due to their inherent nature, such as earthquakes. The median is 1.099 log duration in days, and the IQR is 1.946 log duration in days. There are outliers in the upper end of our distribution.
 
     ```{r}
 
+
+    events |>
+      ggplot(aes(x = log(duration_days), y = log(total_damage_000_us))) +
+      geom_point() +
+      geom_smooth(method = "lm", se = FALSE) +
+      labs(
+        x = "Log of Duration in Days",
+        y = "Log Total Economic Damage (Thousands of USD)",
+        title = "Relationship between Duration of Natural Disaster and Total Economic Damage",
+        subtitle = "Both Variables Log-transformed"
+      )
+
+    ```
+
+    There seems to be a weak positive linear relationship between the log of duration in days with log of total economic damage (in thousands of dollars). There is a lot of variability in the response variable when the log of duration in days is low, but the variability decreases as the x value increases. There are outliers present throughout the graph.
+
+    ```{r}
     events |>
       ggplot(aes(x = log(duration_days), y = log(total_damage_000_us), color = disaster_type)) +
       geom_point() +
       geom_smooth(method = "lm", se = FALSE) +
       labs(
         x = "Log of Duration in Days",
-        y = "Log of Total Economic Damage (Thousands of USD)",
-        title = "Relationship between Duration of Natural Disaster and Total Economic Damage",
+        y = "Log Total Economic Damage (Thousands of USD)",
+        title = "Relationship between Duration of Natural Disaster and Total Economic Damage
+        for Each Disaster Type",
         subtitle = "Both Variables Log-transformed"
       )
 
@@ -214,11 +248,11 @@ Predictors of interests:
       geom_smooth(method = "lm", se = FALSE) + 
       labs(
         x = "Log of Duration in Days",
-        y = "Log of Total Economic Damage (Thousands of USD)",
-        title = "Relationship between Duration of Natural Disaster and Total Economic Damage",
+        y = "Log Total Economic Damage (Thousands of USD)",
+        title = "Relationship between Duration of Natural Disaster and Total Economic Damage
+        for Each Disaster Type",
         subtitle = "Both Variables Log-transformed"
       )
-
 
     ```
 
