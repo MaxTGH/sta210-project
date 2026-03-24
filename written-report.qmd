@@ -147,6 +147,8 @@ The distribution of the logged response variable is unimodal and symmetric. The 
 1.  disaster_type - the type of disaster (categorical)
 
     ```{r}
+    #| fig-width: 8
+
 
     events |>
       distinct(disaster_type)
