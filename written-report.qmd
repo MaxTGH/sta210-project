@@ -22,6 +22,7 @@ library(tidymodels)
 library(readxl)
 library(janitor)
 library(lubridate)
+library(knitr)
 
 raw_events <- read_excel("data/emdat_disasters_2000_2025.xlsx") 
 
@@ -223,6 +224,29 @@ Predictors of interests:
     ```
 
 3.  total_deaths - Total fatalities (deceased and missing combined) (quantitative)
+
+    ```{r}
+
+    data.frame(
+      Statistic = names(summary(events$total_deaths)),
+      Value = as.numeric(summary(events$total_deaths))
+    ) |> kable(digits = 3)
+
+    events |>
+      ggplot(aes(x = log(total_deaths + 1))) +
+      geom_density(fill = "blue", alpha = 0.6) +
+      geom_vline(
+        xintercept = median(log(events$total_deaths + 1)),
+        linetype = "solid",
+        color = "black"
+      ) +
+      labs(
+        title = "Distribution of Log-Transformed Number of Fatalities (Deceased & Missing)",
+        x = "Number Fatalities",
+        y = "Density"
+      ) +
+      scale_x_continuous(breaks = seq(0, 12, by = 1))
+    ```
 
 4.  no_injured - Number of people with physical injuries, trauma, or illness requiring immediate medical assistance due to the disaster (quantitative)
 
