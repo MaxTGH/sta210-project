@@ -16,7 +16,7 @@ editor: visual
 #| warning: false
 #| label: load-pkg-data
 
-
+library(rms)
 library(tidyverse)
 library(tidymodels)
 library(readxl)
@@ -371,6 +371,89 @@ We again applied a log transformation to better visualize the distribution. In t
 
 From the summary statistics, there is a gap between the median (60,000 people) and the mean (over 1.3 million people), indicating a big right tail driven by a small number of extremely large disasters. The maximum value of 150,000,000 people affected highlights the scale at which certain disasters can disrupt entire populations. This makes sense considering the nature of natural disasters: while many events are relatively small, large-scale disasters can impact vast populations through displacement and infrastructure damage.
 
+Methodology
+
+```{r}
+
+set.seed(210)
+
+events_split <- initial_split(data = events, prop = 0.75)
+
+events_train <- training(events_split)
+events_test <- testing(events_split)
+```
+
+```{r}
+
+events_fit <- lm(log_total_damage_000_us ~ log(no_affected) + log_duration_days + disaster_type + log(total_deaths) + log(no_injured), data = events_train)
+
+
+vif(events_fit)
+
+events_fit_inter <- lm(log_total_damage_000_us ~ log(no_affected) + log_duration_days * disaster_type + log(total_deaths) + log(no_injured), data = events_train)
+```
+
+```{r}
+events_spec <- linear_reg()
+
+folds <- vfold_cv(events_train, v = 3)
+# CV on 
+events_wflow1 <- workflow() |>
+  add_model(events_spec) |>
+  add_formula(log_total_damage_000_us ~ log(no_affected) + log_duration_days + disaster_type + log(total_deaths) + log(no_injured))
+              
+
+events_fit_rs1 <- events_wflow1 |>
+  fit_resamples(resamples = folds)
+
+collect_metrics(events_fit_rs1)
+
+
+# CV on interaction model
+events_wflow2 <- workflow() |>
+  add_model(events_spec) |>
+  add_formula(log_total_damage_000_us ~ log(no_affected) + log_duration_days * disaster_type + log(total_deaths) + log(no_injured))
+              
+
+events_fit_rs2 <- events_wflow2 |>
+  fit_resamples(resamples = folds)
+
+collect_metrics(events_fit_rs2)
+
+```
+
+```{r}
+#model diagnostics
+
+events_aug <- augment(events_fit)
+
+events_aug |>
+  ggplot(aes(x = .fitted, y = .resid)) +
+  geom_point() 
+
+
+events_aug |>
+  ggplot(aes(x = .fitted)) +
+  geom_histogram() 
+
+
+events_aug |>
+  ggplot(aes(x = disaster_type, y = .resid)) +
+  geom_boxplot() 
+
+
+events_aug |>
+  filter(.cooksd > 0.5)
+```
+
+We are choosing the below model because after conducting cross-validation, we discovered that this model a higher r-squared compared to the model with the interaction effect.
+
+```{r}
+
+tidy(events_fit) |>
+  kable(digits = 3)
+```
+
 ::: callout-important
-Before you submit, make sure your code chunks are turned off with `echo: false` and there are no warnings or messages with `warning: false` and `message: false` in the YAML.
+events_fitBefore you submit, make sure your code chunks are turned off with `echo: false` and there are no warnings or messages with `warning: false` and `message: false` in the YAML.
 :::
