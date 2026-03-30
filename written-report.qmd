@@ -454,6 +454,20 @@ tidy(events_fit) |>
   kable(digits = 3)
 ```
 
+Conditions are all satisfied
+
+```{r}
+
+events_test_aug <- augment(events_fit, newdata = events_test)
+
+rmse(events_test_aug, truth = log_total_damage_000_us, estimate = .fitted)
+
+events_test_aug_2 <- augment(events_fit_inter, newdata = events_test)
+
+rmse(events_test_aug_2, truth = log_total_damage_000_us, estimate = .fitted)
+
+```
+
 ::: callout-important
 events_fitBefore you submit, make sure your code chunks are turned off with `echo: false` and there are no warnings or messages with `warning: false` and `message: false` in the YAML.
 :::
