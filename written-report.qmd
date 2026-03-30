@@ -1,6 +1,6 @@
 ---
 title: "Predicting Economic Damage of Natural Disasters"
-author: "Max Niu"
+author: "Hyeonsu An, Max Niu"
 date: "Update date"
 format: pdf
 execute: 
@@ -104,7 +104,7 @@ The data dictionary can be found [here](https://github.com/sta210-sp26/project-M
 
 #### Limitations and Concerns
 
-There are a bunch of outliers in our data set in terms of the total economic damage, duration in days, and many other variables. This motivated us to apply the logarithmic function to those variables. These outliers, however, should still be kept in mind.
+There are a considerable number of outliers in our data set with respect to total economic damage, duration in days, and many other variables. This motivated us to apply the logarithmic function to those variables. These outliers, however, should still be considered in the larger-picture analysis.
 
 ## Exploratory Data Analysis
 
@@ -113,8 +113,8 @@ events |>
   ggplot(aes(x = total_damage_000_us)) +
   geom_histogram() + 
   labs(
-    x = "Value of all economic losses (thousands of US dollars)",
-    title = "Distribution of Economic Damage of Disasters from 2000 - 2025",
+    x = "Log-Transformed Economic Losses (thousands, USD)",
+    title = "Distribution of Economic Damage of Disasters\nfrom 2000 - 2025",
     subtitle = "With outliers"
   )
 
@@ -125,8 +125,8 @@ events |> #with outliers
   ggplot(aes(x = log(total_damage_000_us))) +
   geom_histogram() + 
   labs(
-    x = "Value of all economic losses (thousands of US dollars)",
-    title = "Distribution of Economic Damage of Disasters from 2000 - 2025"
+    x = "Log-Transformed Economic Losses (thousands, USD)",
+    title = "Distribution of Economic Damage of Disasters\nfrom 2000 - 2025"
   )
 
 events <- events|>
@@ -173,7 +173,7 @@ The distribution of the logged response variable is unimodal and symmetric. The 
       geom_boxplot() + 
       labs(
         x = "Disaster Type",
-        y = "Log Total Economic Damage (Thousands of USD)",
+        y = "Log of Economic Losses (thousands, USD)",
         title = "Distribution of Log of Total Economic Damage for each Disaster Type"
       )
 
@@ -224,7 +224,7 @@ The distribution of the logged response variable is unimodal and symmetric. The 
       geom_smooth(method = "lm", se = FALSE) +
       labs(
         x = "Log of Duration in Days",
-        y = "Log Total Economic Damage (Thousands of USD)",
+        y = "Log of Economic Losses (thousands, USD)",
         title = "Relationship between Duration of Natural Disaster and Total Economic Damage",
         subtitle = "Both Variables Log-transformed"
       )
@@ -303,7 +303,7 @@ The distribution of the logged response variable is unimodal and symmetric. The 
       labs(
         title = "Damage vs Deaths by Disaster Type",
         x = "Log of Total Fatalities",
-        y = "Log of Economic Damage",
+        y = "Log of Economic Losses (thousands, USD)",
         color = "Disaster Type"
       ) +
       theme_minimal()
