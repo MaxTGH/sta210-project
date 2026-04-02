@@ -383,6 +383,10 @@ events_train <- training(events_split)
 events_test <- testing(events_split)
 ```
 
+Multicollinearity -
+
+To determine if there is multicollinearity among the variables, we used calculated the variance inflation factor (VIF).
+
 ```{r}
 
 events_fit <- lm(log_total_damage_000_us ~ log(no_affected) + log_duration_days + disaster_type + log(total_deaths) + log(no_injured), data = events_train)
@@ -393,7 +397,11 @@ vif(events_fit)
 events_fit_inter <- lm(log_total_damage_000_us ~ log(no_affected) + log_duration_days * disaster_type + log(total_deaths) + log(no_injured), data = events_train)
 ```
 
-Cross validation
+Because all of the VIF values are below 5, we concluded that multicollinearity is not prevalent among the variables, and we opted to include all of them in the model.
+
+Determining the best model -
+
+Cross validation:
 
 ```{r}
 events_spec <- linear_reg()
@@ -424,7 +432,7 @@ collect_metrics(events_fit_rs2)
 
 ```
 
-Evaluating model perfomance on test dataset
+Evaluating model performance on test dataset:
 
 ```{r}
 events_test_aug <- augment(events_fit, newdata = events_test)
@@ -445,7 +453,7 @@ tidy(events_fit) |>
   kable(digits = 3)
 ```
 
-These are diagnostics of the model.
+Model Diagnostics:
 
 ```{r}
 #model diagnostics
