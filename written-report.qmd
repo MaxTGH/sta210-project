@@ -383,6 +383,10 @@ events_train <- training(events_split)
 events_test <- testing(events_split)
 ```
 
+Multicollinearity -
+
+To determine if there is multicollinearity among the variables, we used calculated the variance inflation factor (VIF).
+
 ```{r}
 
 events_fit <- lm(log_total_damage_000_us ~ log(no_affected) + log_duration_days + disaster_type + log(total_deaths) + log(no_injured), data = events_train)
@@ -392,6 +396,12 @@ vif(events_fit)
 
 events_fit_inter <- lm(log_total_damage_000_us ~ log(no_affected) + log_duration_days * disaster_type + log(total_deaths) + log(no_injured), data = events_train)
 ```
+
+Because all of the VIF values are below 5, we concluded that multicollinearity is not prevalent among the variables, and we opted to include all of them in the model.
+
+Determining the best model -
+
+Cross validation:
 
 ```{r}
 events_spec <- linear_reg()
@@ -422,6 +432,29 @@ collect_metrics(events_fit_rs2)
 
 ```
 
+Evaluating model performance on test dataset:
+
+```{r}
+events_test_aug <- augment(events_fit, newdata = events_test)
+
+rmse(events_test_aug, truth = log_total_damage_000_us, estimate = .fitted)
+
+events_test_aug_2 <- augment(events_fit_inter, newdata = events_test)
+
+rmse(events_test_aug_2, truth = log_total_damage_000_us, estimate = .fitted)
+```
+
+We are choosing the model with log no_affected, log duration_days, disaster_type, log total_deaths, and log no_injured without any interaction effects because after conducting cross-validation, we discovered that this model has a higher r-squared compared to the model with the interaction effect. Furthermore, it performs better on the unseen testing data with a RMSE value of 2.593128 compared to the RMSE value of the other model of 2.649203.
+
+This is the model we chose:
+
+```{r}
+tidy(events_fit) |>
+  kable(digits = 3)
+```
+
+Model Diagnostics:
+
 ```{r}
 #model diagnostics
 
@@ -429,30 +462,48 @@ events_aug <- augment(events_fit)
 
 events_aug |>
   ggplot(aes(x = .fitted, y = .resid)) +
-  geom_point() 
+  geom_point() + 
+  labs(
+    x = "Fitted Values",
+    y = "Residuals",
+    title = "Relationship of Residuals and Fitted Values"
+  )
 
 
 events_aug |>
-  ggplot(aes(x = .fitted)) +
-  geom_histogram() 
+  ggplot(aes(x = .resid)) +
+  geom_histogram() +
+  labs(
+    title = "Distribution of Residual Values",
+    x = "Residuals"
+  )
 
 
 events_aug |>
   ggplot(aes(x = disaster_type, y = .resid)) +
-  geom_boxplot() 
+  geom_boxplot() + 
+  labs(
+    x = "Disaster Type",
+    y = "Residuals",
+    title = "Distribution of Residuals for each Disaster Type"
+  )
 
 
 events_aug |>
   filter(.cooksd > 0.5)
 ```
 
-We are choosing the below model because after conducting cross-validation, we discovered that this model a higher r-squared compared to the model with the interaction effect.
+The model conditions are all satisfied.
 
-```{r}
+Linearity: The linearity condition is satisfied because the points are randomly scattered in the plot of fitted values vs. residual values. We can not guess whether the residual would be positive or negative for any predicted value.
 
-tidy(events_fit) |>
-  kable(digits = 3)
-```
+Constant Variance: The constant variance condition is satisfied because the vertical spread is approximately equal for each predicted value. Although the cluster of points appear to form a fan shape, there are points outside of the fan shape pattern that allow this condition to be satisfied.
+
+Normality: The normality condition is satisfied because the distribution is unimodal and roughly symmetric and thus, similar to a normal distribution.
+
+Independence: We can assume that this condition is satisfied because we are told that a disaster is included in the data set if at least one of the following criteria are met: 10+ people killed, 100+ people affected, declaration of a state of emergency, and solicitation of international assistance. Each disaster is an independent event as well. Furthermore, in the graph displaying the distribution of the residuals for each disaster type, we see that there is no correlation between the residuals and disaster type.
+
+We removed data with drop_na() so we should keep this in mind.
 
 **Interpretations**
 
