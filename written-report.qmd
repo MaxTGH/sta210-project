@@ -373,6 +373,8 @@ From the summary statistics, there is a gap between the median (60,000 people) a
 
 ## Methodology
 
+#### Splitting the data - 
+
 ```{r}
 
 set.seed(210)
@@ -383,9 +385,9 @@ events_train <- training(events_split)
 events_test <- testing(events_split)
 ```
 
-Multicollinearity -
+#### Determining if multicollinearity is present -
 
-To determine if there is multicollinearity among the variables, we used calculated the variance inflation factor (VIF).
+To determine if there is multicollinearity among the variables, we calculated the variance inflation factor (VIF) for each predictor variable.
 
 ```{r}
 
@@ -393,21 +395,26 @@ events_fit <- lm(log_total_damage_000_us ~ log(no_affected) + log_duration_days 
 
 
 vif(events_fit)
-
-events_fit_inter <- lm(log_total_damage_000_us ~ log(no_affected) + log_duration_days * disaster_type + log(total_deaths) + log(no_injured), data = events_train)
 ```
 
 Because all of the VIF values are below 5, we concluded that multicollinearity is not prevalent among the variables, and we opted to include all of them in the model.
 
-Determining the best model -
+#### Determining the best model -
 
-Cross validation:
+We were curious to see if a model with an interaction effect between log_duration_days and disaster_type would be a better model, so we conducted cross validation to see which model performed better.
 
 ```{r}
+
+events_fit_inter <- lm(log_total_damage_000_us ~ log(no_affected) + log_duration_days * disaster_type + log(total_deaths) + log(no_injured), data = events_train)
+```
+
+```{r}
+set.seed(210)
+# Cross validation on main effects model
 events_spec <- linear_reg()
 
 folds <- vfold_cv(events_train, v = 3)
-# CV on 
+
 events_wflow1 <- workflow() |>
   add_model(events_spec) |>
   add_formula(log_total_damage_000_us ~ log(no_affected) + log_duration_days + disaster_type + log(total_deaths) + log(no_injured))
@@ -430,35 +437,44 @@ events_fit_rs2 <- events_wflow2 |>
 
 collect_metrics(events_fit_rs2)
 
+
 ```
 
-Evaluating model performance on test dataset:
-
-```{r}
-events_test_aug <- augment(events_fit, newdata = events_test)
-
-rmse(events_test_aug, truth = log_total_damage_000_us, estimate = .fitted)
-
-events_test_aug_2 <- augment(events_fit_inter, newdata = events_test)
-
-rmse(events_test_aug_2, truth = log_total_damage_000_us, estimate = .fitted)
-```
-
-We are choosing the model with log no_affected, log duration_days, disaster_type, log total_deaths, and log no_injured without any interaction effects because after conducting cross-validation, we discovered that this model has a higher r-squared compared to the model with the interaction effect. Furthermore, it performs better on the unseen testing data with a RMSE value of 2.593128 compared to the RMSE value of the other model of 2.649203.
-
-This is the model we chose:
+At this point, we are going to move forward with the model with log no_affected, log duration_days, disaster_type, log total_deaths, and log no_injured without any interaction effects because after conducting cross-validation, we discovered that this model has a higher r-squared compared to the model with the interaction effect.
 
 ```{r}
 tidy(events_fit) |>
   kable(digits = 3)
 ```
 
-Model Diagnostics:
+After displaying the model coefficients and p-values, we realized that the coefficient for log(no_affected) was not statistically significant at all because of its p-value of 0.853, which is much greater than 0.05. We decided to explore one last model, a model with all the previous predictors as additive effects but without log(no_affected).
+
+```{r}
+
+events_fit_noaf <- lm(log_total_damage_000_us ~ log_duration_days + disaster_type + log(total_deaths) + log(no_injured), data = events_train)
+
+events_test_aug <- augment(events_fit, newdata = events_test)
+
+rmse(events_test_aug, truth = log_total_damage_000_us, estimate = .fitted)
+
+events_test_aug_2 <- augment(events_fit_noaf, newdata = events_test)
+
+rmse(events_test_aug_2, truth = log_total_damage_000_us, estimate = .fitted)
+```
+
+After evaluating the performance of the two models on the testing data, we discovered that the model without log(no_affected) performed slightly better with a lower RMSE value of 2.592011 compared to 2.593128. Although this is not significantly different, the model without the log(no_affected) has less predictors and therefore, simpler, which makes it the more optimal model.
+
+```{r}
+tidy(events_fit_noaf) |>
+  kable(digits = 3)
+```
+
+We then evaluated the model diagnostics for the chosen model.
 
 ```{r}
 #model diagnostics
 
-events_aug <- augment(events_fit)
+events_aug <- augment(events_fit_noaf)
 
 events_aug |>
   ggplot(aes(x = .fitted, y = .resid)) +
@@ -493,19 +509,17 @@ events_aug |>
   filter(.cooksd > 0.5)
 ```
 
-The model conditions are all satisfied.
+## **Results**
 
-Linearity: The linearity condition is satisfied because the points are randomly scattered in the plot of fitted values vs. residual values. We can not guess whether the residual would be positive or negative for any predicted value.
+For the chosen model, the model diagnostics were all satisfied and there were no influential points in the data set.
 
-Constant Variance: The constant variance condition is satisfied because the vertical spread is approximately equal for each predicted value. Although the cluster of points appear to form a fan shape, there are points outside of the fan shape pattern that allow this condition to be satisfied.
+-   The linearity condition is satisfied because the points are randomly scattered in the plot of fitted values vs. residual values. We can not guess whether the residual would be positive or negative for any predicted value.
 
-Normality: The normality condition is satisfied because the distribution is unimodal and roughly symmetric and thus, similar to a normal distribution.
+-   The constant variance condition is satisfied because the vertical spread is approximately equal for each predicted value. Although the cluster of points appear to form a fan shape, there are points outside of the fan shape pattern that allow this condition to be satisfied.
 
-Independence: We can assume that this condition is satisfied because we are told that a disaster is included in the data set if at least one of the following criteria are met: 10+ people killed, 100+ people affected, declaration of a state of emergency, and solicitation of international assistance. Each disaster is an independent event as well. Furthermore, in the graph displaying the distribution of the residuals for each disaster type, we see that there is no correlation between the residuals and disaster type.
+-   The normality condition is satisfied because the distribution is unimodal and roughly symmetric and thus, similar to a normal distribution.
 
-We removed data with drop_na() so we should keep this in mind.
-
-**Interpretations**
+-   The independence condition is satisfied because we are told that a disaster is included in the data set if at least one of the following criteria are met: 10+ people killed, 100+ people affected, declaration of a state of emergency, and solicitation of international assistance. Each disaster is an independent event as well. Furthermore, in the graph displaying the distribution of the residuals for each disaster type, we see that there is no correlation between the residuals and disaster type.
 
 The statistically significant predictors in the model provide meaningful insight into what drives economic damage from natural disasters:
 
@@ -523,6 +537,10 @@ The statistically significant predictors in the model provide meaningful insight
 
 4.  disaster_typeWildfire:
 
-    Wildfires are expected to multiply total economic damage by a factor of 3.251 (e\^1.179 = 3.251) compared to earthquakes (the baseline category), holding all other variables constant, though this result is only marginally significant (p = 0.058).
+    Wildfires are expected to multiply total economic damage by a factor of 3.193 (e\^1.161 = 3.193) compared to earthquakes (the baseline category), holding all other variables constant, though this result is only marginally significant (p = 0.058).
 
-The coefficients from the model suggest that human impact measures, particularly the number of people injured and disaster duration, are the most important observable predictors of economic damage from natural disasters[.]{.underline} The positive relationship between injuries and economic damage makes intuitive sense: a higher injury toll signals a more intense and widespread event, which simultaneously destroys physical infrastructure and strains public health systems — all of which translate into greater economic costs. The significance of disaster duration further supports this logic, as prolonged events allow for more cumulative destruction of assets and livelihoods.
+The coefficients from the model suggest that human impact measures, particularly the number of people injured and disaster duration, are the most important observable predictors of economic damage from natural disasters. The positive relationship between injuries and economic damage makes intuitive sense: a higher injury toll signals a more intense and widespread event, which simultaneously destroys physical infrastructure and strains public health systems — all of which translate into greater economic costs. The significance of disaster duration further supports this logic, as prolonged events allow for more cumulative destruction of assets and livelihoods.
+
+## Discussion
+
+Include that we removed data with drop_na().
