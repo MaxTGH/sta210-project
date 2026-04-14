@@ -126,7 +126,8 @@ events |> #with outliers
   geom_histogram() + 
   labs(
     x = "Log-Transformed Economic Losses (thousands, USD)",
-    title = "Distribution of Economic Damage of Disasters\nfrom 2000 - 2025"
+    title = "Distribution of Economic Damage of Natural Disasters\nfrom 2000 - 2025",
+    y = "Count"
   )
 
 events <- events|>
@@ -233,6 +234,8 @@ The distribution of the logged response variable is unimodal and symmetric. The 
 
     events |>
       summarize(r_squared = (cor(x = log_duration_days, y = log_total_damage_000_us))^2)
+
+
     ```
 
     There seems to be a weak positive linear relationship between the log of duration in days with log of total economic damage (in thousands of dollars). The r-squared value is 0.003596655. There is a lot of variability in the response variable when the log of duration in days is low, but the variability decreases as the x value increases. There are outliers present throughout the graph.
@@ -246,24 +249,24 @@ The distribution of the logged response variable is unimodal and symmetric. The 
       geom_smooth(method = "lm", se = FALSE) +
       labs(
         x = "Log of Duration in Days",
-        y = "Log Economic Damage (Thousands of USD)",
+        y = "Log Economic Damage (Thousands, USD)",
         title = "Relationship between Duration of Natural Disaster and Total Economic Damage
         for Each Disaster Type",
         subtitle = "Both Variables Log-transformed"
       )
 
     events |>
-      ggplot(aes(x = log(duration_days), y = log(total_damage_000_us))) +
+      ggplot(aes(x = log(duration_days), y = log(total_damage_000_us), color = disaster_type)) +
       geom_point() +
       facet_wrap(~disaster_type)+
       geom_smooth(method = "lm", se = FALSE) + 
       labs(
         x = "Log of Duration in Days",
-        y = "Log Economic Damage (Thousands of USD)",
-        title = "Relationship between Duration of Natural Disaster and Total Economic Damage
-        for Each Disaster Type",
-        subtitle = "Both Variables Log-transformed"
-      )
+        y = "Log Economic Damage (Thousands, USD)",
+        title = "Relationship between Duration of Natural Disaster and Total Economic Damage",
+        subtitle = "Faceted by Disaster Type"
+      ) +
+      theme(legend.position = "none")
 
     ```
 
@@ -299,16 +302,23 @@ The distribution of the logged response variable is unimodal and symmetric. The 
     ```{r}
     events |>
       ggplot(aes(x = log(total_deaths + 1),
-                 y = log(total_damage_000_us + 1),
-                 color = disaster_type)) +
-      geom_point(alpha = 0.6) +
+                 y = log(total_damage_000_us + 1))) +
+      geom_point() +
+      geom_smooth(method = "lm") + 
       labs(
-        title = "Damage vs Deaths by Disaster Type",
+        title = "Relationship of Economic Damage and Death Toll of Natural Disasters",
         x = "Log of Total Fatalities",
         y = "Log of Economic Losses (thousands, USD)",
         color = "Disaster Type"
       ) +
       theme_minimal()
+
+    model <- lm(
+      log(total_damage_000_us + 1) ~ log(total_deaths + 1),
+      data = events
+    )
+
+    glance(model)$r.squared
     ```
 
     There is a clear positive relationship between total deaths and economic damage. Disasters with higher fatalities generally correspond to higher economic losses (USD). However, the relationship is noisy and dispersed, indicating that deaths alone may not be a strong predictor of damage and that further analysis needs to be done.
@@ -339,7 +349,28 @@ The distribution of the logged response variable is unimodal and symmetric. The 
       ) +
       scale_x_continuous(breaks = seq(0, 13, by = 1))
 
+    events |>
+      ggplot(aes(x = log(no_injured + 1),
+                 y = log(total_damage_000_us + 1))) +
+      geom_point() +
+      geom_smooth(method = "lm") + 
+      labs(
+        title = "Relationship of Economic Damage and Number of Injuries",
+        x = "Log of Number of People with Injuries",
+        y = "Log of Economic Losses (thousands, USD)"
+      ) +
+      theme_minimal()
+
+    model <- lm(
+      log(total_damage_000_us + 1) ~ log(no_injured + 1),
+      data = events
+    )
+
+    glance(model)$r.squared
+
     ```
+
+    R-squared = 0.18
 
     The story is similar to that of the previous predictor, total_deaths. There is a clear unimodal shape with a right skew, and we know that this skewness has been alleviated by the log transformation (so in reality, much larger). It makes sense that the median is higher at 60 people because, common-sensically, there will always be more people injured than killed at any given natural disaster. This corresponds to the maximum number being higher than that of total_deaths at 366596 people.
 
@@ -365,7 +396,29 @@ The distribution of the logged response variable is unimodal and symmetric. The 
         y = "Density"
       ) +
       scale_x_continuous(breaks = seq(0, 20, by = 1))
+
+
+    events |>
+      ggplot(aes(x = log(no_affected + 1),
+                 y = log(total_damage_000_us + 1))) +
+      geom_point() +
+      geom_smooth(method = "lm") + 
+      labs(
+        title = "Relationship of Economic Damage and Number of People Affected",
+        x = "Log of Number of Affected People",
+        y = "Log of Economic Losses (thousands, USD)"
+      ) +
+      theme_minimal()
+
+    model <- lm(
+      log(total_damage_000_us + 1) ~ log(no_affected + 1),
+      data = events
+    )
+
+    glance(model)$r.squared
     ```
+
+    R-squared = 0.044
 
 We again applied a log transformation to better visualize the distribution. In the density plot above, the distribution of the log-transformed values appears roughly unimodal, though there is still a right skew, considering the distribution before the log transformation. Compared to fatalities, the distribution of affected individuals is more spread out, reflecting the wide range of disaster scales – from local events to those impacting entire countries.
 
@@ -373,7 +426,7 @@ From the summary statistics, there is a gap between the median (60,000 people) a
 
 ## Methodology
 
-#### Splitting the data - 
+#### Splitting the data -
 
 ```{r}
 
@@ -413,7 +466,7 @@ set.seed(210)
 # Cross validation on main effects model
 events_spec <- linear_reg()
 
-folds <- vfold_cv(events_train, v = 3)
+folds <- vfold_cv(events_train, v = 8)
 
 events_wflow1 <- workflow() |>
   add_model(events_spec) |>
@@ -463,6 +516,8 @@ rmse(events_test_aug_2, truth = log_total_damage_000_us, estimate = .fitted)
 ```
 
 After evaluating the performance of the two models on the testing data, we discovered that the model without log(no_affected) performed slightly better with a lower RMSE value of 2.592011 compared to 2.593128. Although this is not significantly different, the model without the log(no_affected) has less predictors and therefore, simpler, which makes it the more optimal model.
+
+\pagebreak
 
 ```{r}
 tidy(events_fit_noaf) |>
