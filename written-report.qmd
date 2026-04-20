@@ -435,7 +435,17 @@ The coefficients from the model suggest that human impact measures, particularly
 
 ## Discussion
 
-Include that we removed data with drop_na().
+The most consistent finding from our project is that human impact measures (specifically the number of people injured and total fatalities) are the strongest predictors of economic damage. A 1% increase in injuries predicts approximately 0.422% higher economic losses, and a 1% increase in fatalities predicts approximately 0.161% higher losses, holding other variables constant. This aligns with our discussion in the introduction suggesting that casualties serve as a proxy for disaster intensity: more severe events damage infrastructure and harm public health systems, all of which result in greater economic losses. Disaster duration was also a meaningful predictor, with a 1% increase in duration predicting a 0.285% increase in expected damage, consistent with the intuition that prolonged events allow for greater cumulative destruction.
+
+Notably, the number of people affected (no_affected) was not a useful predictor in our model (p = 0.853), which was somewhat unexpected given our initial hypothesis. We considered the possibility that its predictive value may also be largely captured by the injuries and fatalities variables already in the model, but this was disproven by a non-substantive VIF value (x\<10). 
+
+Regarding disaster type, wildfires were the significant level as a predictor (p = 0.058), with expected damages roughly 3.25 times higher than earthquakes (the baseline), holding all else constant. While storms, floods, and earthquakes are the most frequent disaster types in our data, they are not meaningfully different predictors of economic damage from one another after controlling for human casualties and duration. 
+
+Some limitations should be noted. First, the EM-DAT database is subject to reporting biases: disasters in wealthier, more documented countries may have more complete damage estimates, while events in lower-income regions may be systematically underreported, reducing the reliability of our response variable. Also, the economic damage figures themselves are estimates and may reflect insurance payouts rather than true total losses, reflective measurement error. Finally, we removed a number of ‘N/A’ data points; while we were mindful when cleaning the data, if the removed data points are systematically different in character than the rest of the data, its omission could render biases that we have not considered, 
+
+Given that several disaster type categories (such as volcanic activity, extreme temperature, and mass movement) had very few observations, future work could consider combining these smaller categories into a broader grouping to produce more reliable estimates and reduce model instability. Also, we could bring time into the model. Future analyses could also explore whether the predictive relationships identified here hold across different time periods, given the documented increase in climate-related disaster frequency and severity, which may mean that older observations are less informative for predicting damages from more recent disasters.
+
+\pagebreak
 
 ## Appendix
 
