@@ -286,7 +286,7 @@ We will be working with log-transformed total economic damage in thousands of US
       data = events
     )
 
-    glance(model)$r.squared
+    # glance(model)$r.squared
     ```
 
 There is a weak positive linear relationship between log of total injuries and economic damage with an r-squared value of 0.044. This relationship is similar to log_total_deaths and log_no_injured, but the r-squared value is lower. This means that the relationship is more noisy and dispersed and that there is a stronger relationship between log total deaths and log number of injuries than log of number of people affected with log of total economic damages. We will keep this in mind while finding the best model.
@@ -307,8 +307,9 @@ events_test <- testing(events_split)
 
 Based on our EDA, we were curious to see if a model with an interaction effect between log_duration_days and disaster_type would be a better model, so we conducted 10-fold cross validation to see which model performed better.
 
-• Model 1 (without interaction): log(no_affected) + log_duration_days + disaster_type + log(total_deaths) + log(no_injured)
-• Model 2 (with interaction): log_total_damage_000_us \~ log(no_affected) + **log_duration_days \* disaster_type** + log(total_deaths) + log(no_injured)
+-   Model 1 (without interaction): log(no_affected) + log_duration_days + disaster_type + log(total_deaths) + log(no_injured)
+
+-   Model 2 (with interaction): log_total_damage_000_us \~ log(no_affected) + **log_duration_days \* disaster_type** + log(total_deaths) + log(no_injured)
 
 ```{r}
 
@@ -373,8 +374,9 @@ tidy(events_fit) |>
 
 After displaying the model coefficients and p-values, we realized that the coefficient for log(no_affected) was not statistically significant at all because of its p-value of 0.853, which is much greater than 0.1. We decided to explore one last model, a model with all the previous predictors as additive effects but without log(no_affected). We evaluated the performance of these models through another round of 10-fold cross-validation, comparing RMSE and r-squared to determine the better model.
 
-• Model 1 (with log(no_affected)): **log(no_affected)** + log_duration_days + disaster_type + log(total_deaths) + log(no_injured)
-• Model 3 (without log(no_affected)): log_duration_days + disaster_type + log(total_deaths) + log(no_injured)
+-   Model 1 (with log(no_affected)): **log(no_affected)** + log_duration_days + disaster_type + log(total_deaths) + log(no_injured)
+
+-   Model 3 (without log(no_affected)): log_duration_days + disaster_type + log(total_deaths) + log(no_injured)
 
 ```{r}
 events_wflow1 <- workflow() |>
