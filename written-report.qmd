@@ -411,7 +411,7 @@ rmse(events_fit_noaf_aug,
 
 ## **Results**
 
-For the chosen model, the model diagnostics were all satisfied and there were no influential points in the data set. The final model has an RMSE of 2.592, meaning the predicted values of log total economic damage (in thousands of USD) deviate from the observed values by approximately 2.592, on average. This is only slightly higher than the average cross-validated RMSE from the training set (2.236), which is expected when evaluating on unseen data, suggesting the model generalizes well and is appropriate for this data.
+For the chosen model, the model diagnostics were all satisfied and there were no influential points in the data set. The final model has an RMSE of 2.592, meaning the predicted values of log total economic damage (in thousands of USD) deviate from the observed values by approximately 2.592, on average. **In other words, the predicted values for total economic damage deviate from the observed values by approximately \$13,356**. This is only slightly higher than the average cross-validated RMSE from the training set (2.236), which is expected when evaluating on unseen data, suggesting the model generalizes well and is appropriate for this data.
 
 The statistically significant predictors in the model provide meaningful insight into what drives economic damage from natural disasters:
 
