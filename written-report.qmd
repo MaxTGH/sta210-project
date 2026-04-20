@@ -61,9 +61,9 @@ events <- events|>
          log_duration_days = log(duration_days))
 ```
 
-## 1 Introduction
+# 1 Introduction
 
-#### 1.1 Background:
+## 1.1 Background:
 
 As global temperatures rise, climate-related disasters have increased in both frequency and severity over the past several decades ([World Wild Life](https://www.worldwildlife.org/resources/explainers/is-climate-change-increasing-the-risk-of-disasters/)). Extreme weather events such as floods, droughts, hurricanes, etc. impose a huge human and real economic costs across the world. It is imperative that we understand the determinants of disaster severity (in terms of economic damages) for better policy planning and mitigative strategies.
 
@@ -71,13 +71,13 @@ The Emergency Events Database (EM-DAT), maintained by the Centre for Research on
 
 Include discussion about work others have done related to your research question.
 
-#### 1.2 Research Question:
+## 1.2 Research Question:
 
 How do different disaster characteristics (such as geographic location, time of year, type, and total casualties incurred) predict the total economic damage caused by natural disasters in USD?
 
 -   Specifically, we examine whether disaster type, location, timing, duration, and measures of human impact (deaths, injuries, and affected population) are associated with higher reported economic losses.
 
-#### 1.3 Motivation:
+## 1.3 Motivation:
 
 We were first drawn to this research question because were intrigued by this data; we were amazed by the granularity and the surprising breadth of information in this data. However, we realized that doing research on this matter could have real, practial uses.
 
@@ -85,7 +85,7 @@ First, identifying predictors of large economic damage is critical for both publ
 
 By analyzing global disaster data, this project aims to quantify which observable characteristics are most strongly associated with economic loss. We hope that these results may provide insight into which types of disasters and impact measures are most economically destructive.
 
-#### 1.4 Hypothesis Reasoning:
+## 1.4 Hypothesis Reasoning:
 
 Based on economic reasoning and relevant research, we expect that...
 
@@ -93,7 +93,7 @@ Based on economic reasoning and relevant research, we expect that...
 2.  Certain disaster types will incur systematically higher economic damage than that of others.
 3.  The level of damage dollars will defer based on countries because of their respective infrastructure that exists to mitigate damage.
 
-#### 1.5 Data Description:
+## 1.5 Data Description:
 
 This data was obtained from the Emergency Events Database, otherwise known as [EM-DAT](https://doc.emdat.be/docs/data-structure-and-content/emdat-public-table/#column-description), which is maintained by the Centre for Research on the Epidemiology of Disasters (CRED). The goal of the database is to compile standardized information on natural disasters that occur around the world. According to the information on metadata, an event is included in EM-DAT if one or more of the following criteria is met:
 
@@ -106,11 +106,11 @@ Each observation is a different disaster that occurred around the world. Of each
 
 The data dictionary can be found [here](https://github.com/sta210-sp26/project-MaxTGH-hyeonsuan06/blob/main/data/README.md).
 
-#### 1.6 Limitations and Concerns
+## 1.6 Limitations and Concerns
 
 There are a considerable number of outliers in our data set with respect to total economic damage, duration in days, and many other variables. This motivated us to apply the logarithmic function to those variables. These outliers, however, should still be considered in the larger-picture analysis.
 
-#### 1.7 Exploratory Data Analysis
+## 1.7 Exploratory Data Analysis
 
 **Response variable** - log-transformed total economic damage in thousands of USD
 
@@ -291,7 +291,7 @@ We will be working with log-transformed total economic damage in thousands of US
 
 There is a weak positive linear relationship between log of total injuries and economic damage with an r-squared value of 0.044. This relationship is similar to log_total_deaths and log_no_injured, but the r-squared value is lower. This means that the relationship is more noisy and dispersed and that there is a stronger relationship between log total deaths and log number of injuries than log of number of people affected with log of total economic damages. We will keep this in mind while finding the best model.
 
-## 2 Methodology
+# 2 Methodology
 
 ```{r}
 
@@ -303,7 +303,7 @@ events_train <- training(events_split)
 events_test <- testing(events_split)
 ```
 
-#### 2.1 Evaluating the interaction effect -
+## 2.1 Evaluating the interaction effect -
 
 Based on our EDA, we were curious to see if a model with an interaction effect between log_duration_days and disaster_type would be a better model, so we conducted 10-fold cross validation to see which model performed better.
 
@@ -369,7 +369,7 @@ tidy(events_fit) |>
   kable(digits = 3)
 ```
 
-#### 2.2 Evaluating the log(no_affected) predictor -
+## 2.2 Evaluating the log(no_affected) predictor -
 
 After displaying the model coefficients and p-values, we realized that the coefficient for log(no_affected) was not statistically significant at all because of its p-value of 0.853, which is much greater than 0.1. We decided to explore one last model, a model with all the previous predictors as additive effects but without log(no_affected). We evaluated the performance of these models through another round of 10-fold cross-validation, comparing RMSE and r-squared to determine the better model.
 
@@ -408,7 +408,7 @@ bind_rows(res1, res2) |>
 
 After evaluating the performance of the two models through cross-validation, we discovered that the values for RMSE and r-squared were similar again for model 1 and model 3. Because model 3 is more parsimonious and performed slightly better than model 1 with a lower RMSE value of 2.236 compared to 2.240, we decided to choose the model without log(no_affected) as our final model.
 
-## **3 Results**
+# **3 Results**
 
 **Final Model (Model 3):**
 
@@ -452,7 +452,7 @@ The statistically significant predictors in the model provide meaningful insight
 
 The coefficients from the model suggest that human impact measures, particularly the number of people injured and disaster duration, are the most important observable predictors of economic damage from natural disasters. The positive relationship between injuries and economic damage makes intuitive sense: a higher injury toll signals a more intense and widespread event, which simultaneously destroys physical infrastructure and strains public health systems — all of which translate into greater economic costs. The significance of disaster duration further supports this logic, as prolonged events allow for more cumulative destruction of assets and livelihoods.
 
-## 4 Discussion
+# 4 Discussion
 
 The most consistent finding from our project is that human impact measures (specifically the number of people injured and total fatalities) are the strongest predictors of economic damage. A 1% increase in injuries predicts approximately 0.422% higher economic losses, and a 1% increase in fatalities predicts approximately 0.161% higher losses, holding other variables constant. This aligns with our discussion in the introduction suggesting that casualties serve as a proxy for disaster intensity: more severe events damage infrastructure and harm public health systems, all of which result in greater economic losses. Disaster duration was also a meaningful predictor, with a 1% increase in duration predicting a 0.285% increase in expected damage, consistent with the intuition that prolonged events allow for greater cumulative destruction.
 
@@ -460,19 +460,19 @@ Notably, the number of people affected (no_affected) was not a useful predictor 
 
 Regarding disaster type, wildfires were the significant level as a predictor (p = 0.058), with expected damages roughly 3.25 times higher than earthquakes (the baseline), holding all else constant. While storms, floods, and earthquakes are the most frequent disaster types in our data, they are not meaningfully different predictors of economic damage from one another after controlling for human casualties and duration. 
 
-#### **4.1 Limitations/Concerns**
+## **4.1 Limitations/Concerns**
 
 Some limitations should be noted. First, the EM-DAT database is subject to reporting biases: disasters in wealthier, more documented countries may have more complete damage estimates, while events in lower-income regions may be systematically under reported, reducing the reliability of our response variable. Also, the economic damage figures themselves are estimates and may reflect insurance payouts rather than true total losses, reflective measurement error. Finally, we removed a large number of 'N/A' data points; while we attempted to explore if the removed data points were systematically different in character than the rest of the data and didn't find anything, there could be hidden differences, causing the omission of the 'N/A data points' to render biases that we have not considered, 
 
-#### **4.2 Future Studies**
+## **4.2 Future Studies**
 
 Given that several disaster type categories (such as volcanic activity, extreme temperature, and mass movement) had very few observations, future work could consider combining these smaller categories into a broader grouping to produce more reliable estimates and reduce model instability. Also, we could bring time into the model. Future analyses could also explore whether the predictive relationships identified here hold across different time periods, given the documented increase in climate-related disaster frequency and severity, which may mean that older observations are less informative for predicting damages from more recent disasters.
 
 \pagebreak
 
-## Appendix
+# Appendix
 
-#### Exploratory Data Analysis
+## Exploratory Data Analysis
 
 **Response Variable:** log of total economic damage in thousands of USD
 
@@ -621,7 +621,7 @@ events |>
 
 In the density plot above, the distribution of the log-transformed values appears roughly unimodal, though there is still a right skew. Compared to fatalities, the distribution of affected individuals is more spread out, reflecting the wide range of disaster scales – from local events to those impacting entire countries. From the summary statistics, there is a gap between the median (60,000 people) and the mean (over 1.3 million people), indicating a big right tail driven by a small number of extremely large disasters. The maximum value of 150,000,000 people affected highlights the scale at which certain disasters can disrupt entire populations. This makes sense considering the nature of natural disasters: while many events are relatively small, large-scale disasters can impact vast populations through displacement and infrastructure damage.
 
-#### Model Diagnostics
+## Model Diagnostics
 
 ```{r}
 #| fig-width: 8
@@ -673,7 +673,8 @@ events_aug |>
 To determine if there is multicollinearity among the variables, we calculated the variance inflation factor (VIF) for each predictor variable.
 
 ```{r}
-vif(events_fit_noaf)
+vif(events_fit_noaf) |>
+  kable(digits = 3)
 ```
 
 Because all of the VIF values are below 5, we concluded that multicollinearity is not prevalent among the variables.
