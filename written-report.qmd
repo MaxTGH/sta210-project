@@ -599,6 +599,7 @@ In the density plot above, the distribution of the log-transformed values appear
 #### Model Diagnostics
 
 ```{r}
+#| fig-width: 8
 #model diagnostics
 
 events_aug <- augment(events_fit_noaf)
