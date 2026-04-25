@@ -103,43 +103,33 @@ This data was obtained from the Emergency Events Database, otherwise known as [E
 -   Declaration of a state of emergency
 -   Solicitation of international assistance
 
-Each observation is a different disaster that occurred around the world. Of each disaster, data on the number of people injured, affected, homeless, or killed, the total economic damages, type of disaster, exact location, start date and end date of the disaster were collected.
+The dataset includes disasters that occurred from 2000 to 2025. Each observation is a different disaster that occurred around the world. Of each disaster, data on the number of people injured, affected, homeless, or killed, the total economic damages, type of disaster, exact location, start date and end date of the disaster were collected.
 
 The data dictionary can be found [here](https://github.com/sta210-sp26/project-MaxTGH-hyeonsuan06/blob/main/data/README.md).
 
 ## 1.6 Data Cleaning
 
-To clean the raw natural disaster dataset, variable names were standardized using clean_names(). Next, the dataset was reduced to only the variables relevant to the analysis. These included information on disaster type, location (country), event timing (start and end year, month, and day), and key impact measures such as total deaths, number injured, number affected, total affected, and total economic damage (in thousands of USD). Rows containing missing values were then removed using drop_na(). We attempted to make sure there was no relationship between the observations with missing values. Using the event timing data, a new variable duration_days was calculated as the difference between the end date and start date. An additional day was added to this value to ensure that the duration includes the start date.
+To clean the raw natural disaster dataset, the dataset was first reduced to only the variables relevant to the analysis. These included information on disaster type, location (country), event timing (start and end year, month, and day), and key impact measures such as total deaths, number injured, number affected, total affected, and total economic damage (in thousands of USD). Rows containing missing values were then removed using drop_na(). We attempted to make sure there was no relationship between the observations with missing values. Using the event timing data, a new variable duration_days was calculated as the difference between the end date and start date. An additional day was added to this value to ensure that the duration includes the start date.
 
 We considered combining the levels of disaster_type with few observations into one level named "Other", but after deliberation, we decided to keep all the levels because although our cleaned data set had few observations for volcanic activity, extreme temperature, and mass movement (wet), in the raw data set, there are 338 observations for volcanic activity, 568 observations for extreme temperature, and 494 observations for mass movement (wet). This demonstrates that these natural disasters are common and thus, being able to predict the total economic damage associated with these disasters is important.
 
-## 1.8 Exploratory Data Analysis
+## 1.7 Exploratory Data Analysis
 
 **Response variable** - log-transformed total economic damage in thousands of USD
 
 ```{r}
+#| fig-width: 6
+#| fig-height: 3
 
 events |>
   ggplot(aes(x = log(total_damage_000_us))) +
   geom_histogram() + 
   labs(
-    x = "Log-Transformed Economic Losses (thousands, USD)",
-    title = "Distribution of Economic Damage of Natural Disasters\nfrom 2000 - 2025",
+    x = "Log Economic Losses (thousands, USD)",
+    title = "Distribution of Economic Damage of Natural Disasters",
     y = "Count"
   )
-
-events |>
-  summarise(
-    min = min(log_total_damage_000_us),
-    `1st_qu` = quantile(log_total_damage_000_us, 0.25),
-    median = median(log_total_damage_000_us),
-    mean = mean(log_total_damage_000_us),
-    `3rd_qu` = quantile(log_total_damage_000_us, 0.75),
-    max = max(log_total_damage_000_us),
-    sd = sd(log_total_damage_000_us)) |>
-  kable(digits = 3)
   
-
 ```
 
 We will be working with log-transformed total economic damage in thousands of USD, because without the log transformation, the 123 outliers skew the data heavily to the right. The distribution of the logged response variable is unimodal and symmetric. The center is best represented by the mean, which is \$98,027,173.52 (e\^11.493 \* 1000), and the spread is best represented with the standard deviation, which is \$13544.98 (e\^2.606 \* 1000). There are outliers present in our distribution.
@@ -159,14 +149,6 @@ We will be working with log-transformed total economic damage in thousands of US
         y = "Log of Economic Losses (thousands, USD)",
         title = "Distribution of Log of Total Economic Damage for each Disaster Type"
       )
-
-    events |>
-      group_by(disaster_type) |>
-      summarize(
-        median = median(log_total_damage_000_us),
-        IQR = IQR(log_total_damage_000_us)
-      ) |>
-      kable(digits = 3)
     ```
 
     Wildfires have the highest median log of total economic damage (in thousands of dollars), which is 12.559, and thus, normal total economic damage, which would be 284,604.84 thousands of dollars (e\^12.559). The median of earthquakes is slightly lower, and then the median of volcanic activities, floods, and storms, which all have similar values, slightly below the median of earthquakes. Wet mass movements have the lowest median (log of) total economic damage. Storms, floods, and earthquakes have the highest variability in the (log of) total economic damage.
@@ -174,7 +156,8 @@ We will be working with log-transformed total economic damage in thousands of US
 2.  duration - duration in days of the disaster (quantitative)
 
     ```{r}
-    #| fig-width: 8
+    #| fig-width: 7
+    #| fig-height: 3
 
     events |>
       ggplot(aes(x = log(duration_days), y = log(total_damage_000_us))) +
@@ -183,12 +166,11 @@ We will be working with log-transformed total economic damage in thousands of US
       labs(
         x = "Log of Duration in Days",
         y = "Log of Economic Losses (thousands, USD)",
-        title = "Relationship between Duration of Natural Disaster and Total Economic Damage",
-        subtitle = "Both Variables Log-transformed"
+        title = "Relationship between Duration of Natural Disaster and Total Economic Damage"
       )
 
-    events |>
-      summarize(r_squared = (cor(x = log_duration_days, y = log_total_damage_000_us))^2)
+    #events |>
+      #summarize(r_squared = (cor(x = log_duration_days, y = log_total_damage_000_us))^2)
 
 
     ```
@@ -198,7 +180,8 @@ We will be working with log-transformed total economic damage in thousands of US
     Based off of our knowledge about how the duration of various disasters and how that should affect economic damage, we then decide to explore an interaction effect between log_duration_days and disaster_type.
 
     ```{r}
-    #| fig-width: 8
+    #| fig-width: 7
+    #| fig-height: 3
 
     events |>
       ggplot(aes(x = log(duration_days), y = log(total_damage_000_us), color = disaster_type)) +
@@ -207,7 +190,7 @@ We will be working with log-transformed total economic damage in thousands of US
       geom_smooth(method = "lm", se = FALSE) + 
       labs(
         x = "Log of Duration in Days",
-        y = "Log Economic Damage (Thousands, USD)",
+        y = "Log Economic Losses (Thousand, USD)",
         title = "Relationship between Duration of Natural Disaster and Total Economic Damage",
         subtitle = "Faceted by Disaster Type"
       ) +
@@ -220,6 +203,8 @@ We will be working with log-transformed total economic damage in thousands of US
 3.  total_deaths - Total fatalities (deceased and missing combined) (quantitative)
 
     ```{r}
+    #| fig-width: 7
+    #| fig-height: 3
     events |>
       ggplot(aes(x = log(total_deaths + 1),
                  y = log(total_damage_000_us + 1))) +
@@ -228,7 +213,7 @@ We will be working with log-transformed total economic damage in thousands of US
       labs(
         title = "Relationship of Economic Damage and Death Toll of Natural Disasters",
         x = "Log of Total Fatalities",
-        y = "Log of Economic Losses (thousands, USD)",
+        y = "Log Economic Losses (thousands, USD)",
         color = "Disaster Type"
       ) +
       theme_minimal()
@@ -246,6 +231,8 @@ We will be working with log-transformed total economic damage in thousands of US
 4.  no_injured - Number of people with physical injuries, trauma, or illness requiring immediate medical assistance due to the disaster (quantitative)
 
     ```{r}
+    #| fig-width: 7
+    #| fig-height: 3
     events |>
       ggplot(aes(x = log(no_injured + 1),
                  y = log(total_damage_000_us + 1))) +
@@ -254,7 +241,7 @@ We will be working with log-transformed total economic damage in thousands of US
       labs(
         title = "Relationship of Economic Damage and Number of Injuries",
         x = "Log of Number of People with Injuries",
-        y = "Log of Economic Losses (thousands, USD)"
+        y = "Log Economic Losses (thousands, USD)"
       ) +
       theme_minimal()
 
@@ -272,6 +259,8 @@ We will be working with log-transformed total economic damage in thousands of US
 5.  no_affected - Number of people requiring immediate assistance due to the disaster (quantitative)
 
     ```{r}
+    #| fig-width: 7
+    #| fig-height: 3
     events |>
       ggplot(aes(x = log(no_affected + 1),
                  y = log(total_damage_000_us + 1))) +
@@ -280,7 +269,7 @@ We will be working with log-transformed total economic damage in thousands of US
       labs(
         title = "Relationship of Economic Damage and Number of People Affected",
         x = "Log of Number of Affected People",
-        y = "Log of Economic Losses (thousands, USD)"
+        y = "Log Economic Losses (thousands, USD)"
       ) +
       theme_minimal()
 
@@ -497,11 +486,25 @@ events |>
   ggplot(aes(x = total_damage_000_us)) +
   geom_histogram() + 
   labs(
-    x = "Log-Transformed Economic Losses (thousands, USD)",
-    title = "Distribution of Economic Damage of Disasters\nfrom 2000 - 2025"
+    x = "Economic Losses (thousands, USD)",
+    title = "Distribution of Economic Damage of Disasters"
   )
 
-summary(events$total_damage_000_us)
+```
+
+Summary statistics of log-transformed economic losses:
+
+```{r}
+events |>
+  summarise(
+    min = min(log_total_damage_000_us),
+    `1st_qu` = quantile(log_total_damage_000_us, 0.25),
+    median = median(log_total_damage_000_us),
+    mean = mean(log_total_damage_000_us),
+    `3rd_qu` = quantile(log_total_damage_000_us, 0.75),
+    max = max(log_total_damage_000_us),
+    sd = sd(log_total_damage_000_us)) |>
+  kable(digits = 3)
 ```
 
 **Predictor Variables:**
@@ -525,15 +528,13 @@ events |>
     title = "Number of Occurences of each Disaster Type"
   )
 
-
 events |>
-  ggplot(aes(x = disaster_type, y = log_total_damage_000_us)) +
-  geom_boxplot() + 
-  labs(
-    x = "Disaster Type",
-    y = "Log Total Economic Damage (Thousands of USD)",
-    title = "Distribution of Log Total Economic Damage for Each Disaster Type "
-  )
+  group_by(disaster_type) |>
+  summarize(
+    median = median(log_total_damage_000_us),
+    IQR = IQR(log_total_damage_000_us)
+  ) |>
+  kable(digits = 3)
 ```
 
 2.  duration - duration in days of the disaster (quantitative)
