@@ -80,11 +80,9 @@ How do different disaster characteristics (such as geographic location, time of 
 
 ## 1.3 Motivation:
 
-We were first drawn to this research question because were intrigued by this data; we were amazed by the granularity and the surprising breadth of information in this data. However, we realized that doing research on this matter could have real, practical uses.
+We were first drawn to this research question because were intrigued by this data; we were amazed by the granularity and the surprising breadth of information in this data. However, we realized that doing research on this matter could have real, practical uses. Prior work, such as [Noy (2009)](https://www.sciencedirect.com/science/article/abs/pii/S030438780800031X), has shown that country-level factors like institutional strength and trade openness shape how severely a disaster disrupts an economy — but this line of research focuses on macroeconomic outcomes rather than predicting damage from the observable characteristics of individual disaster events. Our project aims to fill this gap.
 
-First, identifying predictors of large economic damage is critical for both public and private institutions. Governments and international organizations allocate substantial resources towards mitigation and recovery efforts, yet the determinants of high-cost disasters vary across event types and regions. Same applies for insurance companies and hedge fund traders that try modeling key determinants relevant to a disaster for their comparative advantage against peers in the market.
-
-By analyzing global disaster data, this project aims to quantify which observable characteristics are most strongly associated with economic loss. We hope that these results may provide insight into which types of disasters and impact measures are most economically destructive.
+Identifying predictors of large economic damage is critical for both public and private institutions. Governments and international organizations allocate use resources towards mitigation and recovery efforts, yet the determinants of these disasters vary across event types and regions. The same applies to chase alpha. By analyzing global disaster data, this project aims to quantify which observable characteristics are most predictive of economic loss.
 
 ## 1.4 Hypothesis Reasoning:
 
@@ -466,9 +464,11 @@ The predictive findings from this analysis have meaningful implications for a lo
 
 Private institutions stand to benefit as well. Insurance companies and actuaries could account for injury counts, fatality projections, and disaster type into more data-driven risk pricing models, improving the accuracy of underwriting in regions where disasters are frequent. Hedge funds and banks could apply similar predictions to trading strategies involving catastrophe bonds, commodity markets, and real estate lending, where the ability to quickly estimate economic losses presents an edge in the market.
 
-## **4.3 Future Studies**
+## **4.3  Building on Previous Work & Future Studies**
 
-Given that several disaster type categories (such as volcanic activity, extreme temperature, and mass movement) had very few observations, future work could consider combining these smaller categories into a broader grouping to produce more reliable estimates and reduce model instability. Also, we could bring time into the model. Future analyses could also explore whether the predictive relationships identified here hold across different time periods, given the documented increase in climate-related disaster frequency and severity, which may mean that older observations are less informative for predicting damages from more recent disasters.
+Our findings build on previous work in this space. [Noy (2009)](https://www.sciencedirect.com/science/article/abs/pii/S030438780800031X) showed that country-level factors like institutional quality and per capital income can significantly impact how severely a disaster disrupts a national economy. Our results are tangentially align with this: we find that human casualties and disaster duration are meaningful predictors of economic damage at the individual event level, suggesting that disaster intensity, not just country context, drives losses. However, where Noy operated at the macroeconomic level, our model works at the level of individual disaster events, which offers a more actionable predictive tool.
+
+For future work, incorporating country-level (outside of the disasters themselves) predictors such as GDP per capita or an institutional quality index directly into our event-level model would be a natural extension that bridges both approaches, potentially capturing how the same disaster plays out very differently depending on where it strikes. Future analysis could also explore whether the predictive relationships identified here hold across different time periods given the documented increase in climate-related disaster frequency and severity. This may mean that older observations are less informative for predicting damages from more recent disasters.
 
 \pagebreak
 
