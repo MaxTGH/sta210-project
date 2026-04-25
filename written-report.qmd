@@ -370,6 +370,7 @@ After displaying the model coefficients and p-values, we realized that the coeff
 -   Model 3 (without log(no_affected)): log_duration_days + disaster_type + log(total_deaths) + log(no_injured)
 
 ```{r}
+
 events_wflow1 <- workflow() |>
   add_model(events_spec) |>
   add_formula(log_total_damage_000_us ~ log(no_affected) + log_duration_days + disaster_type + log(total_deaths) + log(no_injured))
@@ -396,10 +397,11 @@ bind_rows(res1, res2) |>
   mutate(
     model = c(rep("Model 1", 2), rep("Model 3", 2))
   ) |>
-  relocate(model)
+  relocate(model) |>
+  kable (digits = 3)
 ```
 
-After evaluating the performance of the two models through cross-validation, we discovered that the values for RMSE and r-squared were similar again for model 1 and model 3. Because model 3 is more parsimonious and performed slightly better than model 1 with a lower RMSE value of 2.236 compared to 2.240, we decided to choose the model without log(no_affected) as our final model.
+After evaluating the performance of the two models through cross-validation, we discovered that the values for RMSE and r-squared were similar again for model 1 and model 3. Because model 3 is more parsimonious, we decided to choose the model without log(no_affected) as our final model.
 
 # **3 Results**
 
@@ -423,7 +425,7 @@ rmse(events_fit_noaf_aug,
 
 ```
 
-The final model has an RMSE of 2.592 on the test dataset, meaning the predicted values of log total economic damage (in thousands of USD) deviate from the observed values by approximately 2.592, on average. **In other words, the predicted values for total economic damage deviate from the observed values by approximately \$13,356**. This is only slightly higher than the average cross-validated RMSE from the training set (2.236), which is expected when evaluating on unseen data, suggesting the model generalizes well and is appropriate for this data.
+The final model has an RMSE of 2.592 on the test dataset, meaning the predicted values of log total economic damage (in thousands of USD) deviate from the observed values by approximately 2.592, on average. Given the IQR is 3.332 but the range is 16.678 for the log total economic losses (thousands, USD), we conclude that this model performs decently well. **Transforming back to the original scale, the predicted values for total economic damage deviate from the observed values by approximately \$13,356**.
 
 The statistically significant predictors (significance level of 0.10) in the model provide meaningful insight into what drives economic damage from natural disasters:
 
@@ -441,7 +443,7 @@ The statistically significant predictors (significance level of 0.10) in the mod
 
 4.  disaster_typeWildfire:
 
-    Wildfires are expected to multiply total economic damage by a factor of 3.193 (e\^1.161 = 3.193) compared to earthquakes (the baseline category), holding all other variables constant.
+    Wildfires are expected to multiply total economic damage by a factor of 3.251 (e\^1.179 = 3.251) compared to earthquakes (the baseline category), holding all other variables constant.
 
 The coefficients from the model suggest that human impact measures, particularly the number of people injured and disaster duration, are the most important observable predictors of economic damage from natural disasters. The positive relationship between injuries and economic damage makes intuitive sense: a higher injury toll signals a more intense and widespread event, which simultaneously destroys physical infrastructure and strains public health systems, all of which translate into greater economic costs.
 
