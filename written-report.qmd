@@ -1,7 +1,7 @@
 ---
 title: "Predicting Economic Damage of Natural Disasters"
 author: "Hyeonsu An, Max Niu"
-date: "4/20/26"
+date: "4/27/26"
 format: 
   pdf: 
     geometry:
@@ -82,7 +82,7 @@ How do different disaster characteristics (such as time of year, type, and total
 
 ## 1.3 Motivation:
 
-We were first drawn to this research question because were intrigued by this data; we were amazed by the granularity and the surprising breadth of information in this data. However, we realized that doing research on this matter could have real, practical uses. Prior work, such as [Noy (2009)](https://www.sciencedirect.com/science/article/abs/pii/S030438780800031X), has shown that country-level factors like institutional strength and trade openness shape how severely a disaster disrupts an economy — but this line of research focuses on macroeconomic outcomes rather than predicting damage from the observable characteristics of individual disaster events. Our project aims to fill this gap.
+We were first drawn to this research question because we are intrigued by this data; we were amazed by the granularity and the surprising breadth of information in this data. However, we realized that doing research on this matter could have real, practical uses. Prior work, such as [Noy (2009)](https://www.sciencedirect.com/science/article/abs/pii/S030438780800031X), has shown that country-level factors like institutional strength and trade openness shape how severely a disaster disrupts an economy — but this line of research focuses on macroeconomic outcomes rather than predicting damage from the observable characteristics of individual disaster events. Our project aims to fill this gap.
 
 Identifying predictors of large economic damage is critical for both public and private institutions. Governments and international organizations allocate use resources towards mitigation and recovery efforts, yet the determinants of these disasters vary across event types and regions. The same applies to chase alpha. By analyzing global disaster data, this project aims to quantify which observable characteristics are most predictive of economic loss.
 
@@ -411,7 +411,9 @@ tidy(events_fit_noaf) |>
   kable(digits = 3)
 ```
 
-**Performance of final model on test data set:**
+For the chosen model, the model diagnostics, including the linearity, equal variance, normality, independence, and multicollinearity (more detailed information/analysis found in the appendix under model diagnostics), were all satisfied and there were no influential points in the data set.
+
+**Performance of final model:**
 
 ```{r}
 events_fit_noaf_aug <- augment(events_fit_noaf, newdata = events_test)
@@ -422,11 +424,9 @@ rmse(events_fit_noaf_aug,
 
 ```
 
-For the chosen model, the model diagnostics, including the linearity, equal variance, normality, independence, and multicollinearity (more detailed information/analysis found in the appendix under model diagnostics), were all satisfied and there were no influential points in the data set.
+The final model has an RMSE of 2.592 on the test dataset, meaning the predicted values of log total economic damage (in thousands of USD) deviate from the observed values by approximately 2.592, on average. **In other words, the predicted values for total economic damage deviate from the observed values by approximately \$13,356**. This is only slightly higher than the average cross-validated RMSE from the training set (2.236), which is expected when evaluating on unseen data, suggesting the model generalizes well and is appropriate for this data.
 
-The final model has an RMSE of 2.592, meaning the predicted values of log total economic damage (in thousands of USD) deviate from the observed values by approximately 2.592, on average. **In other words, the predicted values for total economic damage deviate from the observed values by approximately \$13,356**. This is only slightly higher than the average cross-validated RMSE from the training set (2.236), which is expected when evaluating on unseen data, suggesting the model generalizes well and is appropriate for this data.
-
-The statistically significant predictors in the model provide meaningful insight into what drives economic damage from natural disasters:
+The statistically significant predictors (significance level of 0.10) in the model provide meaningful insight into what drives economic damage from natural disasters:
 
 1.  no_injured:
 
@@ -448,11 +448,9 @@ The coefficients from the model suggest that human impact measures, particularly
 
 # 4 Discussion
 
-The most prominent finding from our project is that human impact measures (specifically the number of people injured and total fatalities) are the strongest predictors of economic damage. A 1% increase in injuries predicts approximately 0.422% higher economic losses, and a 1% increase in fatalities predicts approximately 0.161% higher losses, holding other variables constant. This aligns with our discussion in the introduction suggesting that casualties serve as a proxy for disaster intensity: more severe events damage infrastructure and harm public health systems, all of which result in greater economic losses. Disaster duration was also a meaningful predictor, with a 1% increase in duration predicting a 0.285% increase in expected damage, consistent with the intuition that prolonged events allow for greater cumulative destruction.
+The most prominent finding from our project is that human impact measures (specifically the log of the number of people injured and log of the total fatalities) are the strongest predictors of economic damage. Because the p-values associated with the coefficients are less than our significance level of 0.10, this means that the data suggest that there is a linear relationship between those variables and economic damage. A 1% increase in injuries predicts approximately 0.422% higher economic losses, and a 1% increase in fatalities predicts approximately 0.161% higher losses, holding other variables constant. This aligns with our discussion in the introduction suggesting that casualties serve as a proxy for disaster intensity: more severe events damage infrastructure and harm public health systems, all of which result in greater economic losses. Disaster duration was also a meaningful predictor (coefficient p-value less than 0.10), with a 1% increase in duration predicting a 0.285% increase in expected damage, consistent with the intuition that prolonged events allow for greater cumulative destruction.
 
-Notably, the number of people affected (no_affected) was not a useful predictor in our model (p = 0.853), which was somewhat unexpected given our initial hypothesis. We considered the possibility that its predictive value may also be largely captured by the injuries and fatalities variables already in the model, but this was disproven by a non-substantive VIF value (x\<10). 
-
-Regarding disaster type, wildfires were the significant level as a predictor (p = 0.058), with expected damages roughly 3.25 times higher than earthquakes (the baseline), holding all else constant. While storms, floods, and earthquakes are the most frequent disaster types in our data, they are not meaningfully different predictors of economic damage from one another after controlling for human casualties and duration. 
+Regarding disaster type, wildfires were the only significant level (p = 0.058 \< 0.10), with expected damages roughly 3.25 times higher than earthquakes (the baseline), holding all other predictors constant. While storms and floods are the most frequent disaster types in our data, they are not meaningful predictors of economic damage compared to earthquakes, after adjusting for log of human impact measures and log of duration. 
 
 ## **4.1 Limitations/Concerns**
 
