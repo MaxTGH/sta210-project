@@ -3,7 +3,7 @@
 ## emdat_disasters_2000_2025.xlsx
 
 | Variable | Description |
-|------------------------------------|------------------------------------|
+|----|----|
 | DisNo. | A unique 8-digit identifier including the year (4 digits) and a sequential number (4 digits) for each disaster event (i.e., 2004-0659). In the EM-DAT Public Table, the ISO country code is appended. See column **ISO** below. |
 | Historic | Binary field specifying whether or not the disaster happened before 2000, using the **Start Year**. Data before 2000 should be considered of lesser quality (see [Time Bias](https://doc.emdat.be/docs/known-issues-and-limitations/specific-biases/#time-bias)). |
 | Classification Key | A unique 15-character string identifying disasters in terms of the **Group**, **Subgroup**, **Type** and **Subtype** classification hierarchy. See [Disaster Classification System](https://doc.emdat.be/docs/data-structure-and-content/disaster-classification-system/). |
