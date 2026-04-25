@@ -26,6 +26,7 @@ library(knitr)
 
 raw_events <- read_excel("data/emdat_disasters_2000_2025.xlsx") 
 
+
 ```
 
 ```{r}
@@ -36,6 +37,9 @@ raw_events <- read_excel("data/emdat_disasters_2000_2025.xlsx")
 
 events <- raw_events |>
   clean_names()
+
+events |>
+  count(disaster_type)
 
 events <- events |>
   select(disaster_type, country, start_year, start_month, start_day, end_year, end_month, 
@@ -93,7 +97,7 @@ Based on economic reasoning and relevant research, we expect that...
 2.  Certain disaster types will incur systematically higher economic damage than that of others.
 3.  The level of damage dollars will defer based on countries because of their respective infrastructure that exists to mitigate damage.
 
-## 1.5 Data Description:
+## 1.5 Data Description
 
 This data was obtained from the Emergency Events Database, otherwise known as [EM-DAT](https://doc.emdat.be/docs/data-structure-and-content/emdat-public-table/#column-description), which is maintained by the Centre for Research on the Epidemiology of Disasters (CRED). The goal of the database is to compile standardized information on natural disasters that occur around the world. According to the information on metadata, an event is included in EM-DAT if one or more of the following criteria is met:
 
@@ -106,11 +110,13 @@ Each observation is a different disaster that occurred around the world. Of each
 
 The data dictionary can be found [here](https://github.com/sta210-sp26/project-MaxTGH-hyeonsuan06/blob/main/data/README.md).
 
-## 1.6 Limitations and Concerns
+## 1.6 Data Cleaning
 
-There are a considerable number of outliers in our data set with respect to total economic damage, duration in days, and many other variables. This motivated us to apply the logarithmic function to those variables. These outliers, however, should still be considered in the larger-picture analysis.
+To clean the raw natural disaster dataset, variable names were standardized using clean_names(). Next, the dataset was reduced to only the variables relevant to the analysis. These included information on disaster type, location (country), event timing (start and end year, month, and day), and key impact measures such as total deaths, number injured, number affected, total affected, and total economic damage (in thousands of USD). Rows containing missing values were then removed using drop_na(). We attempted to make sure there was no relationship between the observations with missing values. Using the event timing data, a new variable duration_days was calculated as the difference between the end date and start date. An additional day was added to this value to ensure that the duration includes the start date.
 
-## 1.7 Exploratory Data Analysis
+We considered combining the levels of disaster_type with few observations into one level named "Other", but after deliberation, we decided to keep all the levels because although our cleaned data set had few observations for volcanic activity, extreme temperature, and mass movement (wet), in the raw data set, there are 338 observations for volcanic activity, 568 observations for extreme temperature, and 494 observations for mass movement (wet). This demonstrates that these natural disasters are common and thus, being able to predict the total economic damage associated with these disasters is important.
+
+## 1.8 Exploratory Data Analysis
 
 **Response variable** - log-transformed total economic damage in thousands of USD
 
@@ -464,7 +470,9 @@ Regarding disaster type, wildfires were the significant level as a predictor (p 
 
 ## **4.1 Limitations/Concerns**
 
-Some limitations should be noted. First, the EM-DAT database is subject to reporting biases: disasters in wealthier, more documented countries may have more complete damage estimates, while events in lower-income regions may be systematically under reported, reducing the reliability of our response variable. Also, the economic damage figures themselves are estimates and may reflect insurance payouts rather than true total losses, reflective measurement error. Finally, we removed a large number of 'N/A' data points; while we attempted to explore if the removed data points were systematically different in character than the rest of the data and didn't find anything, there could be hidden differences, causing the omission of the 'N/A data points' to render biases that we have not considered, 
+Some limitations should be noted. First, the EM-DAT database is subject to reporting biases: disasters in wealthier, more documented countries may have more complete damage estimates, while events in lower-income regions may be systematically under reported, reducing the reliability of our response variable. Also, the economic damage figures themselves are estimates and may reflect insurance payouts rather than true total losses, reflective measurement error. Finally, we removed a large number of 'N/A' data points; while we attempted to explore if the removed data points were systematically different in character than the rest of the data and didn't find anything, there could be hidden differences, causing the omission of the 'N/A data points' to render biases that we have not considered.
+
+Furthermore, there are a considerable number of outliers in our data set with respect to total economic damage, duration in days, and many other variables. Although we applied the logarithmic function to those variables, these outliers should still be considered in the larger-picture analysis. 
 
 ## **4.2 Future Studies**
 
@@ -503,7 +511,7 @@ Storms, floods, and earthquakes are the most common disaster types, composing mo
 #| fig-width: 8
 
 events |>
-  distinct(disaster_type)
+  count(disaster_type)
 
 events |>
   ggplot(aes(x = disaster_type)) +
@@ -514,6 +522,15 @@ events |>
     title = "Number of Occurences of each Disaster Type"
   )
 
+
+events |>
+  ggplot(aes(x = disaster_type, y = log_total_damage_000_us)) +
+  geom_boxplot() + 
+  labs(
+    x = "Disaster Type",
+    y = "Log Total Economic Damage (Thousands of USD)",
+    title = "Distribution of Log Total Economic Damage for Each Disaster Type "
+  )
 ```
 
 2.  duration - duration in days of the disaster (quantitative)
@@ -564,7 +581,7 @@ events |>
   ) +
   labs(
     title = "Distribution of Log-Transformed Number of Fatalities (Deceased & Missing)",
-    x = "Log of Number Fatalities",
+    x = "Number Fatalities",
     y = "Density"
   ) +
   scale_x_continuous(breaks = seq(0, 12, by = 1))
