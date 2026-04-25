@@ -471,11 +471,8 @@ Regarding disaster type, wildfires were the significant level as a predictor (p 
 ## **4.1 Limitations/Concerns**
 
 Some limitations should be noted. First, the EM-DAT database is subject to reporting biases: disasters in wealthier, more documented countries may have more complete damage estimates, while events in lower-income regions may be systematically under reported, reducing the reliability of our response variable. Also, the economic damage figures themselves are estimates and may reflect insurance payouts rather than true total losses, reflective measurement error. Finally, we removed a large number of 'N/A' data points; while we attempted to explore if the removed data points were systematically different in character than the rest of the data and didn't find anything, there could be hidden differences, causing the omission of the 'N/A data points' to render biases that we have not considered.
-<<<<<<< HEAD
-=======
 
-Furthermore, there are a considerable number of outliers in our data set with respect to total economic damage, duration in days, and many other variables. Although we applied the logarithmic function to those variables, these outliers should still be considered in the larger-picture analysis. 
->>>>>>> 6d8feb511a4d6b93650ff960973677ff08539561
+Furthermore, there are a considerable number of outliers in our data set with respect to total economic damage, duration in days, and many other variables. Although we applied the logarithmic function to those variables, these outliers should still be considered in the larger-picture analysis.
 
 ## **4.2 Practical Applications**
 
