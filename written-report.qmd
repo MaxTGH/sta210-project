@@ -82,9 +82,9 @@ How do different disaster characteristics (such as time of year, type, and total
 
 ## 1.3 Motivation:
 
-We were first drawn to this research question because were intrigued by this data; we were amazed by the granularity and the surprising breadth of information in this data. However, we realized that doing research on this matter could have real, practical uses. Prior work, such as [Noy (2009)](https://www.sciencedirect.com/science/article/abs/pii/S030438780800031X), has shown that country-level factors like institutional strength and trade openness shape how severely a disaster disrupts an economy — but this line of research focuses on macroeconomic outcomes rather than predicting damage from the observable characteristics of individual disaster events. Our project aims to fill this gap.
+We were first drawn to this research question because were intrigued by the granularity and breadth of information in this data. After digesting the information, we realized that doing research on this matter could have real, practical uses. Prior work, such as [Noy (2009)](https://www.sciencedirect.com/science/article/abs/pii/S030438780800031X), has shown that country-level factors like institutional strength and trade openness shape how severely a disaster disrupts an economy, but this line of research focuses on macroeconomic outcomes rather than predicting damage from the observable characteristics of individual disaster events. Our project aims to fill this gap.
 
-Identifying predictors of large economic damage is critical for both public and private institutions. Governments and international organizations allocate use resources towards mitigation and recovery efforts, yet the determinants of these disasters vary across event types and regions. The same applies to chase alpha. By analyzing global disaster data, this project aims to quantify which observable characteristics are most predictive of economic loss.
+Use cases for identifying predictors of large economic damage ranges from public to private institutions. Governments and international organizations allocate use resources towards mitigation and recovery efforts, yet the determinants of these disasters vary across event types and regions. The same applies to chase alpha. By analyzing global disaster data, this project aims to quantify which observable characteristics are most predictive of economic loss.
 
 ## 1.4 Hypothesis Reasoning:
 
@@ -92,7 +92,6 @@ Based on economic reasoning and relevant research, we expect that...
 
 1.  Disasters with higher number of affected individuals (absolute number, number of deaths and injuries) will have a positive relationship with economic damage.
 2.  Certain disaster types will incur systematically higher economic damage than that of others.
-3.  The level of damage dollars will defer based on countries because of their respective infrastructure that exists to mitigate damage.
 
 ## 1.5 Data Description
 
@@ -281,7 +280,7 @@ We will be working with log-transformed total economic damage in thousands of US
     # glance(model)$r.squared
     ```
 
-There is a weak positive linear relationship between log of total injuries and economic damage with an r-squared value of 0.044. This relationship is similar to log_total_deaths and log_no_injured, but the r-squared value is lower. This means that the relationship is more noisy and dispersed and that there is a stronger relationship between log total deaths and log number of injuries than log of number of people affected with log of total economic damages. We will keep this in mind while finding the best model.
+There is a weak positive linear relationship between log of total injuries and economic damage, with an r-squared value of 0.044. This relationship is similar to log_total_deaths and log_no_injured, but the r-squared value is lower. This means that the relationship is more noisy and dispersed and that there is a stronger relationship between log total deaths and log number of injuries than log of number of people affected with log of total economic damages. We will keep this in mind while finding the best model.
 
 # 2 Methodology
 
@@ -442,9 +441,9 @@ The statistically significant predictors in the model provide meaningful insight
 
 4.  disaster_typeWildfire:
 
-    Wildfires are expected to multiply total economic damage by a factor of 3.193 (e\^1.161 = 3.193) compared to earthquakes (the baseline category), holding all other variables constant, though this result is only marginally significant (p = 0.058).
+    Wildfires are expected to multiply total economic damage by a factor of 3.193 (e\^1.161 = 3.193) compared to earthquakes (the baseline category), holding all other variables constant.
 
-The coefficients from the model suggest that human impact measures, particularly the number of people injured and disaster duration, are the most important observable predictors of economic damage from natural disasters. The positive relationship between injuries and economic damage makes intuitive sense: a higher injury toll signals a more intense and widespread event, which simultaneously destroys physical infrastructure and strains public health systems — all of which translate into greater economic costs. The significance of disaster duration further supports this logic, as prolonged events allow for more cumulative destruction of assets and livelihoods.
+The coefficients from the model suggest that human impact measures, particularly the number of people injured and disaster duration, are the most important observable predictors of economic damage from natural disasters. The positive relationship between injuries and economic damage makes intuitive sense: a higher injury toll signals a more intense and widespread event, which simultaneously destroys physical infrastructure and strains public health systems, all of which translate into greater economic costs.
 
 # 4 Discussion
 
