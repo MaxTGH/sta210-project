@@ -464,7 +464,7 @@ The predictive findings from this analysis have meaningful implications for a lo
 
 Private institutions stand to benefit as well. Insurance companies and actuaries could account for injury counts, fatality projections, and disaster type into more data-driven risk pricing models, improving the accuracy of underwriting in regions where disasters are frequent. Hedge funds and banks could apply similar predictions to trading strategies involving catastrophe bonds, commodity markets, and real estate lending, where the ability to quickly estimate economic losses presents an edge in the market.
 
-## **4.3  Building on Previous Work & Future Studies**
+## **4.3 Building on Previous Work & Future Studies**
 
 Our findings build on previous work in this space. [Noy (2009)](https://www.sciencedirect.com/science/article/abs/pii/S030438780800031X) showed that country-level factors like institutional quality and per capital income can significantly impact how severely a disaster disrupts a national economy. Our results are tangentially align with this: we find that human casualties and disaster duration are meaningful predictors of economic damage at the individual event level, suggesting that disaster intensity, not just country context, drives losses. However, where Noy operated at the macroeconomic level, our model works at the level of individual disaster events, which offers a more actionable predictive tool.
 
