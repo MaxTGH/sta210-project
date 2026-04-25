@@ -2,7 +2,13 @@
 title: "Predicting Economic Damage of Natural Disasters"
 author: "Hyeonsu An, Max Niu"
 date: "4/20/26"
-format: pdf
+format: 
+  pdf: 
+    geometry:
+      - top = 0.8in
+      - bottom = 0.8in
+      - left = 0.8in
+      - right = 0.8in
 execute: 
   warning: false
   message: false
@@ -68,13 +74,9 @@ events <- events|>
 
 As global temperatures rise, climate-related disasters have increased in both frequency and severity over the past several decades ([World Wild Life](https://www.worldwildlife.org/resources/explainers/is-climate-change-increasing-the-risk-of-disasters/)). Extreme weather events such as floods, droughts, hurricanes, etc. impose a huge human and real economic costs across the world. It is imperative that we understand the determinants of disaster severity (in terms of economic damages) for better policy planning and mitigative strategies.
 
-The Emergency Events Database (EM-DAT), maintained by the Centre for Research on the Epidemiology of Disasters (CRED), keeps an internationally standardized data on natural diasters worldwide. The information includes disaster type, location, affected population, deaths, injuries, and economic damages.
-
-Include discussion about work others have done related to your research question.
-
 ## 1.2 Research Question:
 
-How do different disaster characteristics (such as geographic location, time of year, type, and total casualties incurred) predict the total economic damage caused by natural disasters in USD?
+How do different disaster characteristics (such as time of year, type, and total casualties incurred) predict the total economic damage caused by natural disasters in USD?
 
 -   Specifically, we examine whether disaster type, location, timing, duration, and measures of human impact (deaths, injuries, and affected population) are associated with higher reported economic losses.
 
@@ -179,7 +181,7 @@ We will be working with log-transformed total economic damage in thousands of US
 
     ```{r}
     #| fig-width: 7
-    #| fig-height: 3
+    #| fig-height: 3.5
 
     events |>
       ggplot(aes(x = log(duration_days), y = log(total_damage_000_us), color = disaster_type)) +
@@ -188,7 +190,7 @@ We will be working with log-transformed total economic damage in thousands of US
       geom_smooth(method = "lm", se = FALSE) + 
       labs(
         x = "Log of Duration in Days",
-        y = "Log Economic Losses (Thousand, USD)",
+        y = "Log Economic Losses (Thousands, USD)",
         title = "Relationship between Duration of Natural Disaster and Total Economic Damage",
         subtitle = "Faceted by Disaster Type"
       ) +
