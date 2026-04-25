@@ -721,4 +721,3 @@ vif(events_fit_noaf) |>
 
 Because all of the VIF values are below 5, we concluded that multicollinearity is not prevalent among the variables.
 
-#### 
