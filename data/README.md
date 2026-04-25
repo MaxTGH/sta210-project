@@ -1,21 +1,15 @@
 # Data
 
-If using an external dataset (that doesn't come in an R package), place data file(s) in this folder.
-
-Then, include metadata about your dataset including information on provenance, data dictionary, etc.
-
-The data dictionary for your data file(s) using the following format.
-
-## Name of data file - emdat_disasters_2000_2025.xlsx
+## emdat_disasters_2000_2025.xlsx
 
 | Variable | Description |
-|----|----|
+|------------------------------------|------------------------------------|
 | DisNo. | A unique 8-digit identifier including the year (4 digits) and a sequential number (4 digits) for each disaster event (i.e., 2004-0659). In the EM-DAT Public Table, the ISO country code is appended. See column **ISO** below. |
 | Historic | Binary field specifying whether or not the disaster happened before 2000, using the **Start Year**. Data before 2000 should be considered of lesser quality (see [Time Bias](https://doc.emdat.be/docs/known-issues-and-limitations/specific-biases/#time-bias)). |
 | Classification Key | A unique 15-character string identifying disasters in terms of the **Group**, **Subgroup**, **Type** and **Subtype** classification hierarchy. See [Disaster Classification System](https://doc.emdat.be/docs/data-structure-and-content/disaster-classification-system/). |
 | Disaster Group | The disaster group, i.e., “Natural” or “Technological.” See [Disaster Classification System](https://doc.emdat.be/docs/data-structure-and-content/disaster-classification-system/). |
 | Disaster Subgroup | The disaster subgroup. See [Disaster Classification System](https://doc.emdat.be/docs/data-structure-and-content/disaster-classification-system/). |
-| Disaster Type | The disaster type. See [Disaster Classification System](https://doc.emdat.be/docs/data-structure-and-content/disaster-classification-system/). |
+| [**Disaster Type**]{.underline} | The disaster type. See [Disaster Classification System](https://doc.emdat.be/docs/data-structure-and-content/disaster-classification-system/). |
 | Disaster Subtype | The disaster subtype. See [Disaster Classification System](https://doc.emdat.be/docs/data-structure-and-content/disaster-classification-system/). |
 | External IDs | List of identifiers for external resources ([GLIDE](https://www.glidenumber.net/), [USGS](https://earthquake.usgs.gov/earthquakes/search/), [DFO](https://floodobservatory.colorado.edu/), [HANZE](https://naturalhazards.eu/)), in the format “\<source\>:\<identifier\>” and separated by the pipe character ("\|"). |
 | Event Name | Short specification for disaster identification, e.g., storm names (e.g., “Mitch”), plane type in air crash (e.g., “Boeing 707”), disease name (e.g., “Cholera”), or volcano name (e.g., “Etna”). |
@@ -35,22 +29,22 @@ The data dictionary for your data file(s) using the following format.
 | Latitude | North-South coordinates mainly for earthquakes and volcanic activity. Sometimes reported for floods, landslides, and storms (mostly when associated with floods). |
 | Longitude | East-West coordinates mainly for earthquakes and volcanic activity. Sometimes reported for floods, landslides, and storms (mostly when associated with floods). |
 | River Basin | Name of affected river basins, typically used for floods. |
-| Start Year | Year of occurrence of the disaster. |
-| Start Month | Month of occurrence of the disaster. For sudden-impact disasters, this field is well defined. For disasters developing gradually over a longer time period (e.g., drought) with no precise onset date, this field can be left blank. |
-| Start Day | Day of occurrence of the disaster. For sudden-impact disasters, this field is well defined. For disasters developing gradually over a longer time period (e.g., drought) with no precise onset date, this field can be left blank. |
-| End Year | Year of disaster conclusion. |
-| End Month | Month of conclusion of the disaster. For sudden-impact disasters, this field is well defined. For disasters developing gradually over a longer time period (e.g., drought) with no precise end date, this field can be left blank. |
-| End Day | Day of conclusion of the disaster. For sudden-impact disasters, this field is well defined. For disasters developing gradually over a longer time period (e.g., drought) with no precise end date, this field can be left blank. |
-| Total Deaths | Total fatalities (deceased and missing combined, see [Human Impact Variables](https://doc.emdat.be/docs/data-structure-and-content/impact-variables/human/)). |
-| No. Injured | Number of people with physical injuries, trauma, or illness requiring immediate medical assistance due to the disaster (see [Human Impact Variables](https://doc.emdat.be/docs/data-structure-and-content/impact-variables/human/)). |
-| No. Affected | Number of people requiring immediate assistance due to the disaster (see [Human Impact Variables](https://doc.emdat.be/docs/data-structure-and-content/impact-variables/human/)). |
+| [**Start Year**]{.underline} | Year of occurrence of the disaster. |
+| [**Start Month**]{.underline} | Month of occurrence of the disaster. For sudden-impact disasters, this field is well defined. For disasters developing gradually over a longer time period (e.g., drought) with no precise onset date, this field can be left blank. |
+| [**Start Day**]{.underline} | Day of occurrence of the disaster. For sudden-impact disasters, this field is well defined. For disasters developing gradually over a longer time period (e.g., drought) with no precise onset date, this field can be left blank. |
+| [**End Year**]{.underline} | Year of disaster conclusion. |
+| [**End Month**]{.underline} | Month of conclusion of the disaster. For sudden-impact disasters, this field is well defined. For disasters developing gradually over a longer time period (e.g., drought) with no precise end date, this field can be left blank. |
+| [**End Day**]{.underline} | Day of conclusion of the disaster. For sudden-impact disasters, this field is well defined. For disasters developing gradually over a longer time period (e.g., drought) with no precise end date, this field can be left blank. |
+| [**Total Deaths**]{.underline} | Total fatalities (deceased and missing combined, see [Human Impact Variables](https://doc.emdat.be/docs/data-structure-and-content/impact-variables/human/)). |
+| [**No. Injured**]{.underline} | Number of people with physical injuries, trauma, or illness requiring immediate medical assistance due to the disaster (see [Human Impact Variables](https://doc.emdat.be/docs/data-structure-and-content/impact-variables/human/)). |
+| [**No. Affected**]{.underline} | Number of people requiring immediate assistance due to the disaster (see [Human Impact Variables](https://doc.emdat.be/docs/data-structure-and-content/impact-variables/human/)). |
 | No. Homeless | Number of people requiring shelter due to their house being destroyed or heavily damaged during the disaster (see [Human Impact Variables](https://doc.emdat.be/docs/data-structure-and-content/impact-variables/human/)). |
-| Total Affected | Total number of affected people (**No Injured**, **No Affected**, and **No Homeless** combined, see [Human Impact Variables](https://doc.emdat.be/docs/data-structure-and-content/impact-variables/human/)). |
+| Total Affected | Total number of affected people (No Injured, No Affected, and No Homeless combined, see [Human Impact Variables](https://doc.emdat.be/docs/data-structure-and-content/impact-variables/human/)). |
 | Reconstruction Costs (‘000 US\$) | Costs for replacement of lost assets in thousands of US dollars (‘000 US\$) relative to **Start Year**, unadjusted for inflation (see [Economic Impact Variables](https://doc.emdat.be/docs/data-structure-and-content/impact-variables/economic/)). |
 | Reconstruction Costs, Adjusted (‘000 US\$) | **Reconstruction Costs (‘000 US\$)**, adjusted for inflation using the Consumer Price Index (**CPI** column, see [Economic Adjustment](https://doc.emdat.be/docs/protocols/economic-adjustment/)). |
 | Insured Damage (‘000 US\$) | Economic damage covered by insurance companies, in thousands of US dollars (‘000 US\$), relative to **Start Year**, unadjusted for inflation (see [Economic Impact Variables](https://doc.emdat.be/docs/data-structure-and-content/impact-variables/economic/)). |
 | Insured Damage, Adjusted (‘000 US\$) | **Insured Damage (‘000 US\$)** adjusted for inflation using the Consumer Price Index (**CPI** column, see [Economic Adjustment](https://doc.emdat.be/docs/protocols/economic-adjustment/)). |
-| Total Damage (‘000 US\$) | Value of all economic losses directly or indirectly due to the disaster, in thousands of US dollars (‘000 US\$), relative to **Start Year**, unadjusted for inflation (see [Economic Impact Variables](https://doc.emdat.be/docs/data-structure-and-content/impact-variables/economic/)). |
+| [**Total Damage (‘000 US\$)**]{.underline} | Value of all economic losses directly or indirectly due to the disaster, in thousands of US dollars (‘000 US\$), relative to Start Year, unadjusted for inflation (see [Economic Impact Variables](https://doc.emdat.be/docs/data-structure-and-content/impact-variables/economic/)). |
 | Total Damage, Adjusted (‘000 US\$) | **Total Damage (‘000 US\$)** adjusted for inflation using the Consumer Price Index (**CPI** column, see [Economic Adjustment](https://doc.emdat.be/docs/protocols/economic-adjustment/)). |
 | CPI | Consumer Price Index from [OECD](https://doi.org/10.1787/54a3bf57-en) used to adjust US\$ values for inflation relative to **Start Year** (see [Economic Adjustment](https://doc.emdat.be/docs/protocols/economic-adjustment/)). |
 | Admin Units | ***(Deprecated)*** Collection of impacted Administrative Units from the FAO GAUL 2015 referential (Global Administrative Unit Layers 2015). Individual objects correspond to Level-1 or Level-2 Administrative Units, with the corresponding fields `adm1_code`, `adm1_name` or `adm2_code`, `adm2_name` providing the unique identifier to the geometry in the GAUL layer and the name of the unit, respectively. Geocoding is maintained for non-biological natural hazards from 2000 onwards (see [Spatial Information and Geocoding](https://doc.emdat.be/docs/data-structure-and-content/spatial-information/)). Not maintained after 2025. |

@@ -114,7 +114,7 @@ We considered combining the levels of disaster_type with few observations into o
 
 ## 1.7 Exploratory Data Analysis
 
-**Response variable** - log-transformed total economic damage in thousands of USD
+**Response variable** - log-transformed total economic damage (total economic damage in thousands of USD)
 
 ```{r}
 #| fig-width: 6
