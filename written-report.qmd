@@ -174,7 +174,7 @@ We will be working with log-transformed total economic damage in thousands of US
 
     ```
 
-    There seems to be a weak positive linear relationship between the log of duration in days with log of total economic damage (in thousands of dollars). The r-squared value is 0.003596655. There is a lot of variability in the response variable when the log of duration in days is low, but the variability decreases as the x value increases. There are outliers present throughout the graph.
+    There seems to be a weak positive linear relationship between the log of duration in days with log of total economic damage (in thousands of dollars). The r-squared value is 0.0036. There is a lot of variability in the response variable when the log of duration in days is low, but the variability decreases as the x value increases. There are outliers present throughout the graph.
 
     Based off of our knowledge about how the duration of various disasters and how that should affect economic damage, we then decide to explore an interaction effect between log_duration_days and disaster_type.
 
