@@ -471,6 +471,20 @@ Our findings build on previous work in this space. [Noy (2009)](https://www.scie
 
 For future work, incorporating country-level (outside of the disasters themselves) predictors such as GDP per capita or an institutional quality index directly into our event-level model would be a natural extension that bridges both approaches, potentially capturing how the same disaster plays out very differently depending on where it strikes. Future analysis could also explore whether the predictive relationships identified here hold across different time periods given the documented increase in climate-related disaster frequency and severity. This may mean that older observations are less informative for predicting damages from more recent disasters.
 
+# 5 Citations
+
+World Wildlife Fund. (n.d.). *Is climate change increasing the risk of disasters?* World Wildlife Fund.
+
+<https://www.worldwildlife.org/resources/explainers/is-climate-change-increasing-the-risk-of-disasters/>.
+
+Noy, I. (2009). *The macroeconomic consequences of disasters*. *Journal of Development Economics, 88*(2), 221–231.
+
+<https://doi.org/10.1016/j.jdeveco.2008.02.005>.
+
+Centre for Research on the Epidemiology of Disasters (CRED). (n.d.). *EM-DAT public table: Data structure and content.*
+
+<https://doc.emdat.be/docs/data-structure-and-content/emdat-public-table/#column-description>.
+
 \pagebreak
 
 # Appendix
