@@ -740,14 +740,10 @@ events_aug |>
 
 ## C. AI Disclosure
 
--   I used AI when brainstorming initial ideas for the project.
-
 -   I used AI to debug code when errors arose.
 
 -   I used AI when trying to format graphs that were not up to standard.
 
--   I used AI to fine creative visualizations within ggplot package for EDA.
+-   I used AI to find creative visualizations within ggplot package for EDA.
 
 -   I used AI to research past papers/research that were tangential to our project so that we may build/learn from them.
-
--   I used AI to better format the written report.
