@@ -473,17 +473,17 @@ For future work, incorporating country-level (outside of the disasters themselve
 
 # 5 Citations
 
-World Wildlife Fund. (n.d.). *Is climate change increasing the risk of disasters?* World Wildlife Fund.
+-   World Wildlife Fund. (n.d.). *Is climate change increasing the risk of disasters?* World Wildlife Fund.
 
-<https://www.worldwildlife.org/resources/explainers/is-climate-change-increasing-the-risk-of-disasters/>.
+    -   <https://www.worldwildlife.org/resources/explainers/is-climate-change-increasing-the-risk-of-disasters/>.
 
-Noy, I. (2009). *The macroeconomic consequences of disasters*. *Journal of Development Economics, 88*(2), 221–231.
+-   Noy, I. (2009). *The macroeconomic consequences of disasters*. *Journal of Development Economics, 88*(2), 221–231.
 
-<https://doi.org/10.1016/j.jdeveco.2008.02.005>.
+    -   <https://doi.org/10.1016/j.jdeveco.2008.02.005>.
 
-Centre for Research on the Epidemiology of Disasters (CRED). (n.d.). *EM-DAT public table: Data structure and content.*
+-   Centre for Research on the Epidemiology of Disasters (CRED). (n.d.). *EM-DAT public table: Data structure and content.*
 
-<https://doc.emdat.be/docs/data-structure-and-content/emdat-public-table/#column-description>.
+    -   <https://doc.emdat.be/docs/data-structure-and-content/emdat-public-table/#column-description>.
 
 \pagebreak
 
@@ -737,3 +737,17 @@ There are no influential points in our dataset.
 events_aug |>
   filter(.cooksd > 0.5)
 ```
+
+## C. AI Disclosure
+
+-   I used AI when brainstorming initial ideas for the project.
+
+-   I used AI to debug code when errors arose.
+
+-   I used AI when trying to format graphs that were not up to standard.
+
+-   I used AI to fine creative visualizations within ggplot package for EDA.
+
+-   I used AI to research past papers/research that were tangential to our project so that we may build/learn from them.
+
+-   I used AI to better format the written report.
